@@ -44,6 +44,8 @@ var W,
 	G,
 	Y,
 	N,
+	C,
+	U,
 	COLOURLESS;
 
 W = ERNO.WHITE = new ERNO.Color(
@@ -102,7 +104,15 @@ N = ERNO.GRAY = new ERNO.Color(
 	'font-weight: bold; color: #888',
 	'background-color: #888; color: rgba( 0, 0, 0, 0.5 )'
 ),
-ERNO.COLORLESS = new ERNO.Color(
+U = ERNO.BLACK = new ERNO.Color(
+
+	'black',
+	'X',
+	'#000',
+	'font-weight: bold; color: #111',
+	'background-color: #111; color: rgba( 0, 0, 0, 0.5 )'
+),
+C = ERNO.COLORLESS = new ERNO.Color(
 
 	'NA',
 	'X',

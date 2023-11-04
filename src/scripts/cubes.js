@@ -606,20 +606,65 @@ ERNO.Cube = function( parameters ){
 
 	//  Enable key commands for our Cube.
 
+	var algDisplay = document.getElementById( 'alg' );
+
 	document.addEventListener( 'keypress', function( event ){
 		if( event.target.tagName.toLowerCase() !== 'input' &&
 			event.target.tagName.toLowerCase() !== 'textarea' &&
 			!this.mouseInteraction.active &&
 			this.keyboardControlsEnabled ){
-
 				var key = String.fromCharCode( event.which );
-				if( 'XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf( key ) >= 0 ) this.twist( key );
-
+				console.log(key)
+				if(key == ' ')
+					algDisplay.textContent = " "
+				if( 'XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf( key ) >= 0 ) {
+					this.twist( key );
+					algDisplay.textContent += translateTwist(key)
+				}
 		}
 	}.bind( this ));
 
 
-
+	function translateTwist(key) {
+		var map = {
+			l: "L'",
+			r: "R'",
+			u: "U'",
+			d: "D'",
+			f: "F'",
+			b: "B'",
+			L: "L",
+			R: "R",
+			U: "U",
+			D: "D",
+			F: "F",
+			B: "B",
+			a: "l'",
+			c: "r'",
+			g: "u'",
+			h: "d'",
+			i: "f'",
+			j: "b'",
+			A: 'l',
+			C: 'r',
+			G: 'u',
+			H: 'd',
+			I: 'f',
+			J: 'b',
+			m: "M'",
+			s: "S'",
+			e: "E'",
+			M: "M",
+			S: "S",
+			x: "x'",
+			y: "y'",
+			z: "z'",
+			X: "x",
+			Y: "y",
+			Z: "z",
+		};
+		return (key in map ? map[key] : key) + " "
+	}
 
 }
 

@@ -1,32 +1,32 @@
-/*              ·~=≠≠x#≠≠=-                         ·=≈≠xxx≠≈~-·              
-            ·~≠#%&$$$$&%x≈~·                        ~=≠#%$$$$$&%x≈-           
-          ~x&$$$$$$$x~·  -%~                        #≈   -≈&$$$$$$$#≈·        
-        =%$$$$$$$$$$-  -≠$$-                        x$%=·  x$$$$$$$$$&≠-      
-      -%$$$$$$$$$$$$$%%$$$≈                         ·&$$&%&$$$$$$$$$$$$&≠     
-     ·&$$$$$$$$$$$$$$$$$&=                           ·#$$$$$$$$$$$$$$$$$$≈    
-     ≈$$$$$$$$$$$$$$$$$#-                              ≈&$$$$$$$$$$$$$$$$$    
-     ≈$$$$$$$$$$$$$$$$$                                 ≈$$$$$$$$$$$$$$$$$    
-     ·%$$$$$$$$$$$$$$$≈                                  &$$$$$$$$$$$$$$$=    
-      ~#$$$$$$$$$$$$&≈                                   ·#$$$$$$$$$$$$&x     
-      #%%%&&$$$$$&%≈-     =-   ·-=≈≈xxxxxx≠≠=~-·  -=       =x%$$$$$$&&%%&-    
-      ≈$$&&%###≠~-       ·$&≈x%&$$$$$$$$$$$$$$$%#≠&$-        ·-≈###%&&$$%     
-       #$$$$$$$x        ·≈$$$$$$$$$$$$$$$$$$$$$$$$$$%≈-        -$$$$$$$$~     
-       ·x&$$&&%##≈-   ~x&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#=·  ·=x#%&&&$&%=      
-         -%&$$$$$$$≠=%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&x≈%$$$$$$$&≈        
-           -=≠x#%&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%#≠=~·         
-             ·~≠%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%≠=-·          
+/*              ·~=≠≠x#≠≠=-                         ·=≈≠xxx≠≈~-·
+            ·~≠#%&$$$$&%x≈~·                        ~=≠#%$$$$$&%x≈-
+          ~x&$$$$$$$x~·  -%~                        #≈   -≈&$$$$$$$#≈·
+        =%$$$$$$$$$$-  -≠$$-                        x$%=·  x$$$$$$$$$&≠-
+      -%$$$$$$$$$$$$$%%$$$≈                         ·&$$&%&$$$$$$$$$$$$&≠
+     ·&$$$$$$$$$$$$$$$$$&=                           ·#$$$$$$$$$$$$$$$$$$≈
+     ≈$$$$$$$$$$$$$$$$$#-                              ≈&$$$$$$$$$$$$$$$$$
+     ≈$$$$$$$$$$$$$$$$$                                 ≈$$$$$$$$$$$$$$$$$
+     ·%$$$$$$$$$$$$$$$≈                                  &$$$$$$$$$$$$$$$=
+      ~#$$$$$$$$$$$$&≈                                   ·#$$$$$$$$$$$$&x
+      #%%%&&$$$$$&%≈-     =-   ·-=≈≈xxxxxx≠≠=~-·  -=       =x%$$$$$$&&%%&-
+      ≈$$&&%###≠~-       ·$&≈x%&$$$$$$$$$$$$$$$%#≠&$-        ·-≈###%&&$$%
+       #$$$$$$$x        ·≈$$$$$$$$$$$$$$$$$$$$$$$$$$%≈-        -$$$$$$$$~
+       ·x&$$&&%##≈-   ~x&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#=·  ·=x#%&&&$&%=
+         -%&$$$$$$$≠=%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&x≈%$$$$$$$&≈
+           -=≠x#%&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%#≠=~·
+             ·~≠%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%≠=-·
 ≈====≈≠≠≠xx#%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&%%#xx≠≠≈=≈
 %&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&%
- ··-=x%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%x=-·· 
-       -≈#&$$$$$$$$$$$$$$$$$$$$&$$$$$$$$$$$$$$&$$$$$$$$$$$$$$$$$$$$&#≈-       
-          ·=%$$$$$$$$$$$$$$$$$$%=x%$$$$$$$$%≠~%$$$$$$$$$$$$$$$$$$%=·          
-     ·-~≈≠x#%$$$$$$$$$$$$$$$$$$$x  -x$$$$≠·  x$$$$$$$$$$$$$$$$$$$%#x≠≈~-·     
-   =≠&$$$$$%%%&$&%$$$$$$$$$$$$$$$%≠≠%$$$$%≠≠&$$$$$$$$$$$$$$$%&$&%%%$$$$$&≠~   
-  -$&$&#≠==x&$$%%$$~~≠#&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&#≠~~$$%%$$&x==≠#%$%$=  
-  ≈$$$~  ≈%$$#x&$$~    ·-=≠#%&&$$$$$$$$$$$$$$$$&%%#≠=-·    ~$$&x#$$%≈  -$$$x  
-  ≠$$≠  #$$%-~%$#~           ··-~~==========~~-··           ~#$%~·%$$#  =$$#  
-  ≠$%  ·$$#·-$&≈                                              ≠&$-·#$$·  #$#  
-  ≈$=  ~$%  -$&                                                &$·  %$~  -$x  
+ ··-=x%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$%x=-··
+       -≈#&$$$$$$$$$$$$$$$$$$$$&$$$$$$$$$$$$$$&$$$$$$$$$$$$$$$$$$$$&#≈-
+          ·=%$$$$$$$$$$$$$$$$$$%=x%$$$$$$$$%≠~%$$$$$$$$$$$$$$$$$$%=·
+     ·-~≈≠x#%$$$$$$$$$$$$$$$$$$$x  -x$$$$≠·  x$$$$$$$$$$$$$$$$$$$%#x≠≈~-·
+   =≠&$$$$$%%%&$&%$$$$$$$$$$$$$$$%≠≠%$$$$%≠≠&$$$$$$$$$$$$$$$%&$&%%%$$$$$&≠~
+  -$&$&#≠==x&$$%%$$~~≠#&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$&#≠~~$$%%$$&x==≠#%$%$=
+  ≈$$$~  ≈%$$#x&$$~    ·-=≠#%&&$$$$$$$$$$$$$$$$&%%#≠=-·    ~$$&x#$$%≈  -$$$x
+  ≠$$≠  #$$%-~%$#~           ··-~~==========~~-··           ~#$%~·%$$#  =$$#
+  ≠$%  ·$$#·-$&≈                                              ≠&$-·#$$·  #$#
+  ≈$=  ~$%  -$&                                                &$·  %$~  -$x
   -&   ~$~   &≠                                                #%   ~$~   #=*/
 
 
@@ -47,11 +47,11 @@
 	F	Front
 	S 	Standing (rotate according to Front Face's orientation)
 	B 	Back
-	
+
 	L 	Left
 	M 	Middle (rotate according to Left Face's orientation)
 	R 	Right
-	
+
 	U 	Up
 	E 	Equator (rotate according to Up Face's orientation)
 	D 	Down
@@ -59,7 +59,7 @@
 
 
 	ENTIRE CUBE ROTATION COMMANDS
-	
+
 	X   Rotate entire cube according to Right Face's orientation
 	Y   Rotate entire cube according to Up Face's orientation
 	Z   Rotate entire cube according to Front Face's orientation
@@ -77,7 +77,7 @@
 
 
 
-$(document).ready( function(){ 
+$(document).ready( function(){
 
 
 	var useLockedControls = true,
@@ -89,9 +89,83 @@ $(document).ready( function(){
 	window.cube = new ERNO.Cube({
 		hideInvisibleFaces: true,
 		controls: controls,
-		renderer: isIe ? ERNO.renderers.IeCSS3D : null
+		renderer: isIe ? ERNO.renderers.IeCSS3D : null,
+		cubeletColorMap: generateCubeletColorMap()
 	});
 
+	function sideIsSticker(slice, row, col, side) {
+		if (!side && !slice) return true;
+		if (side == 1 && !row) return true;
+		if (side == 2 && col == 2) return true;
+		if (side == 3 && row == 2) return true;
+		if (side == 4 && !col) return true;
+		if (side == 5 && slice == 2) return true;
+		else return false;
+	}
+
+	function sideVisibleInSolutionStep(slice, row, col, side, solutionStep) {
+		switch (solutionStep) {
+			case 'Cross':
+			case 'White Cross':
+			case 'F2L':
+			case undefined:
+				return true;
+			case 'OLL':
+			case 'Yellow Cross':
+				if (row || side == 1) return true;
+				else return false;
+			case 'Yellow Edges':
+				if (row || side == 1 || col == 1 || slice == 1) return true;
+				else return false;
+		}
+	}
+
+	function cubeletVisibleInSolutionStep(slice, row, col, solutionStep) {
+		switch (solutionStep) {
+			case 'Cross':
+			case 'White Cross':
+				if ((row && (slice == 1 || col == 1)) || (slice == 1 && col == 1)) return true;
+				else return false;
+			case 'F2L':
+				if (row ||  (slice == 1 && col == 1)) return true;
+				else return false;
+			case 'OLL':
+			case undefined:
+				return true;
+			case 'Yellow Cross':
+			case 'Yellow Edges':
+				if (row ||  slice == 1 || col == 1) return true;
+				else return false;
+		}
+	}
+
+	function generateCubeletColorMap(solutionStep) {
+		var colors = [ERNO.BLUE, ERNO.YELLOW, ERNO.RED, ERNO.WHITE, ERNO.ORANGE, ERNO.GREEN];
+
+		var cubelets = [];
+		for (var slice = 0; slice < 3; ++slice) {
+			for (var row = 0; row < 3; ++row) {
+				for (var col = 0; col < 3; ++col) {
+					var cubelet = [];
+					for (var side = 0; side < 6; ++side) {
+						if (sideIsSticker(slice, row, col, side)) {
+							if (cubeletVisibleInSolutionStep(slice, row, col, solutionStep)) {
+								if (sideVisibleInSolutionStep(slice, row, col, side, solutionStep)) {
+									cubelet.push(colors[side]);
+								} else {
+									cubelet.push(ERNO.GRAY);
+								}
+							} else {
+								cubelet.push(ERNO.GRAY);
+							}
+						} else cubelet.push(ERNO.COLORLESS);
+					}
+					cubelets.push(cubelet);
+				}
+			}
+		}
+		return cubelets;
+	}
 
 	var container = document.getElementById( 'container' );
 	container.appendChild( cube.domElement );
@@ -99,7 +173,7 @@ $(document).ready( function(){
 
 
 	if( controls === ERNO.Locked ){
-		var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * -0.25, 0 );
+		var fixedOrientation = new THREE.Euler(  Math.PI * 0.2, Math.PI * -0.25,  Math.PI * 0.0);
 		cube.object3D.lookAt( cube.camera.position );
 		cube.rotation.x += fixedOrientation.x;
 		cube.rotation.y += fixedOrientation.y;
@@ -114,11 +188,11 @@ $(document).ready( function(){
 	// var motion = deviceMotion( cube, container );
 
 	// motion.decay = 0.1; 				// The drag effect
-	// motion.range.x = Math.PI * 0.06;	// The range of rotation 
+	// motion.range.x = Math.PI * 0.06;	// The range of rotation
 	// motion.range.y = Math.PI * 0.06;
 	// motion.range.z = 0;
 	// motion.paused = false;				// disables the effect
 
-	
+
 
 })
