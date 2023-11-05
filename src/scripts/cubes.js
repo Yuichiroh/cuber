@@ -230,63 +230,14 @@ ERNO.Cube = function (parameters) {
         this.cubelets.push(new ERNO.Cubelet(this, cubeletId, cubeletColorMap));
     }.bind(this));
 
-    this.sideIsSticker = function (slice, row, col, side) {
-        if (!side && !slice) return true;
-        if (side == 1 && !row) return true;
-        if (side == 2 && col == 2) return true;
-        if (side == 3 && row == 2) return true;
-        if (side == 4 && !col) return true;
-        if (side == 5 && slice == 2) return true;
-        else return false;
-    }
-
-    this.sideVisibleInSolutionStep = function (slice, row, col, side, solutionStep) {
-        switch (solutionStep) {
-            case 'Cross':
-            case 'White Cross':
-            case 'F2L':
-            case undefined:
-                return true;
-            case 'OLL':
-            case 'Yellow Cross':
-                if (row || side == 1) return true;
-                else return false;
-            case 'Yellow Edges':
-                if (row || side == 1 || col == 1 || slice == 1) return true;
-                else return false;
-        }
-    }
-
-    this.cubeletVisibleInSolutionStep = function (slice, row, col, solutionStep) {
-        switch (solutionStep) {
-            case 'Cross':
-            case 'White Cross':
-                if ((row && (slice == 1 || col == 1)) || (slice == 1 && col == 1)) return true;
-                else return false;
-            case 'F2L':
-                if (row || (slice == 1 && col == 1)) return true;
-                else return false;
-            case 'OLL':
-            case undefined:
-                return true;
-            case 'Yellow Cross':
-            case 'Yellow Edges':
-                if (row || slice == 1 || col == 1) return true;
-                else return false;
-        }
-    }
-
     this.changeCubeletsVisibility = function (cubelets, solutionStep) {
-        var colors = [ERNO.BLUE, ERNO.YELLOW, ERNO.RED, ERNO.WHITE, ERNO.ORANGE, ERNO.GREEN];
         this.algDisplay.textContent = ""
         for (var cubelet of cubelets) {
-            console.log(cubelet)
             cubelet.showStickers()
             switch (solutionStep) {
                 case 'Cross':
                 case 'White Cross':
-                    if (cubelet.hasColor(ERNO.YELLOW)) {
-                        console.log("yellow", cubelet.cubeletId)
+                    if (cubelet.hasColor(ERNO.YELLOW) && cubelet.type !== 'center') {
                         cubelet.hideStickers()
                     }
                     if (!cubelet.hasColor(ERNO.WHITE) && cubelet.type !== 'center') {
@@ -299,20 +250,18 @@ ERNO.Cube = function (parameters) {
 
                 case 'F2L':
                     if (cubelet.hasColor(ERNO.YELLOW)) {
-                        console.log("yellow", cubelet.cubeletId)
                         cubelet.hideStickers()
                     }
                     continue;
                 case 'OLL':
                     if (cubelet.hasColor(ERNO.YELLOW)) {
-                        console.log("yellow", cubelet.cubeletId)
                         cubelet.hideStickers()
                         cubelet.showSticker(ERNO.YELLOW.name)
                     }
                     continue;
+                case 'Yellow Edges':
                 case 'OLL Edges':
                     if (cubelet.hasColor(ERNO.YELLOW)) {
-                        console.log("yellow", cubelet.cubeletId)
                         cubelet.hideStickers()
                         if (cubelet.type === 'edge' || cubelet.type === 'center') {
                             cubelet.showSticker(ERNO.YELLOW.name)
@@ -324,9 +273,8 @@ ERNO.Cube = function (parameters) {
                         if (cubelet.type === 'edge') {
                             cubelet.hideStickers()
                             cubelet.showSticker(ERNO.YELLOW.name)
-                        }
-                        else if (cubelet.type === 'corner') {
-                            cubelet.hideSticker(ERNO.YELLOW.name)
+                        } else if (cubelet.type === 'corner') {
+                            // cubelet.hideSticker(ERNO.YELLOW.name)
                         }
                     }
                     continue;
@@ -339,14 +287,18 @@ ERNO.Cube = function (parameters) {
                     continue;
                 case 'Yellow Cross':
                     if (cubelet.hasColor(ERNO.YELLOW)) {
-                        console.log("yellow", cubelet.cubeletId)
                         cubelet.hideStickers()
                         if (cubelet.type === 'edge' || cubelet.type === 'center') {
                             cubelet.showStickers()
                         }
                     }
                     continue;
-                case 'Yellow Edges':
+                case 'Last Layer':
+                    if (!cubelet.hasColor(ERNO.YELLOW) && cubelet.type !== 'center') {
+                        cubelet.hideStickers()
+                    }
+                    continue
+                case 'PLL':
                 case 'ALL':
                 case undefined:
 
@@ -675,7 +627,8 @@ ERNO.Cube = function (parameters) {
 
     this.algDisplay = document.getElementById('alg');
     this.solutionStep = document.getElementById('type');
-    this.algMax = 28
+    this.lefty = false
+    this.algMax = 40
 
     this.key2command = function (key) {
         if (key === key.toLowerCase())
@@ -694,7 +647,7 @@ ERNO.Cube = function (parameters) {
             console.log(key)
             if (key == ' ')
                 this.algDisplay.textContent = ""
-            else if ('12345670'.indexOf(key) >= 0) {
+            else if ('1234567890'.indexOf(key) >= 0) {
                 key2solutionStep = {
                     1: "Cross",
                     2: "F2L",
@@ -702,14 +655,16 @@ ERNO.Cube = function (parameters) {
                     4: "OLL",
                     5: "PLL Corners",
                     6: "PLL Edges",
-                    7: "Yellow Cross",
+                    7: "PLL",
+                    8: "Yellow Cross",
+                    9: "Last Layer",
                     0: "ALL",
                 }
                 this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key])
                 this.solutionStep.textContent = key2solutionStep[key]
             } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
                 this.twist(command);
-                if (parameters.alg){
+                if (parameters.alg) {
                     var toolong = this.algDisplay.textContent.length - this.algMax
                     if (toolong > 0)
                         this.algDisplay.textContent = this.algDisplay.textContent.slice(toolong)
@@ -717,6 +672,28 @@ ERNO.Cube = function (parameters) {
                 }
             } else if (key === '-') {
                 this.undo()
+            } else if (key === 'v') {
+                parameters.alg = !parameters.alg
+                this.algDisplay.textContent = ""
+            } else if (key === 'p') {
+                if (this.lefty) {
+                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * -0.20, Math.PI * 0.0);
+                    new TWEEN.Tween(this.rotation)
+                        .to({
+                            y: fixedOrientation.y
+                        }, 100)
+                        .start();
+                } else {
+                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * 0.20, Math.PI * 0.0);
+                    new TWEEN.Tween(this.rotation)
+                        .to({
+                            y: fixedOrientation.y
+                        }, 100)
+                        .start();
+                }
+                this.lefty = !this.lefty
+            } else {
+                console.log(key)
             }
 
         }

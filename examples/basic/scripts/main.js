@@ -186,7 +186,7 @@ $(document).ready( function(){
 
 
 	if( controls === ERNO.Locked ){
-		var fixedOrientation = new THREE.Euler(  Math.PI * 0.2, Math.PI * -0.25,  Math.PI * 0.0);
+		var fixedOrientation = new THREE.Euler(  Math.PI * 0.2, Math.PI * -0.20,  Math.PI * 0.0);
 		cube.object3D.lookAt( cube.camera.position );
 		cube.rotation.x += fixedOrientation.x;
 		cube.rotation.y += fixedOrientation.y;
