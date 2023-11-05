@@ -90,82 +90,95 @@ $(document).ready( function(){
 		hideInvisibleFaces: true,
 		controls: controls,
 		renderer: isIe ? ERNO.renderers.IeCSS3D : null,
-		cubeletColorMap: generateCubeletColorMap()
+			// cubeletColorMap: generateCubeletColorMap(document.getElementById( 'type' ).textContent),
+		alg: true
 	});
 
-	function sideIsSticker(slice, row, col, side) {
-		if (!side && !slice) return true;
-		if (side == 1 && !row) return true;
-		if (side == 2 && col == 2) return true;
-		if (side == 3 && row == 2) return true;
-		if (side == 4 && !col) return true;
-		if (side == 5 && slice == 2) return true;
-		else return false;
-	}
-
-	function sideVisibleInSolutionStep(slice, row, col, side, solutionStep) {
-		switch (solutionStep) {
-			case 'Cross':
-			case 'White Cross':
-			case 'F2L':
-			case undefined:
-				return true;
-			case 'OLL':
-			case 'Yellow Cross':
-				if (row || side == 1) return true;
-				else return false;
-			case 'Yellow Edges':
-				if (row || side == 1 || col == 1 || slice == 1) return true;
-				else return false;
-		}
-	}
-
-	function cubeletVisibleInSolutionStep(slice, row, col, solutionStep) {
-		switch (solutionStep) {
-			case 'Cross':
-			case 'White Cross':
-				if ((row && (slice == 1 || col == 1)) || (slice == 1 && col == 1)) return true;
-				else return false;
-			case 'F2L':
-				if (row ||  (slice == 1 && col == 1)) return true;
-				else return false;
-			case 'OLL':
-			case undefined:
-				return true;
-			case 'Yellow Cross':
-			case 'Yellow Edges':
-				if (row ||  slice == 1 || col == 1) return true;
-				else return false;
-		}
-	}
-
-	function generateCubeletColorMap(solutionStep) {
-		var colors = [ERNO.BLUE, ERNO.YELLOW, ERNO.RED, ERNO.WHITE, ERNO.ORANGE, ERNO.GREEN];
-
-		var cubelets = [];
-		for (var slice = 0; slice < 3; ++slice) {
-			for (var row = 0; row < 3; ++row) {
-				for (var col = 0; col < 3; ++col) {
-					var cubelet = [];
-					for (var side = 0; side < 6; ++side) {
-						if (sideIsSticker(slice, row, col, side)) {
-							if (cubeletVisibleInSolutionStep(slice, row, col, solutionStep)) {
-								if (sideVisibleInSolutionStep(slice, row, col, side, solutionStep)) {
-									cubelet.push(colors[side]);
-								} else {
-									cubelet.push(ERNO.GRAY);
-								}
-							} else {
-								cubelet.push(ERNO.GRAY);
-							}
-						} else cubelet.push(ERNO.COLORLESS);
-					}
-					cubelets.push(cubelet);
-				}
-			}
-		}
-		return cubelets;
-	}
+	// function sideIsSticker(slice, row, col, side) {
+	// 	if (!side && !slice) return true;
+	// 	if (side == 1 && !row) return true;
+	// 	if (side == 2 && col == 2) return true;
+	// 	if (side == 3 && row == 2) return true;
+	// 	if (side == 4 && !col) return true;
+	// 	if (side == 5 && slice == 2) return true;
+	// 	else return false;
+	// }
+	//
+	// function sideVisibleInSolutionStep(slice, row, col, side, solutionStep) {
+	// 	switch (solutionStep) {
+	// 		case 'Cross':
+	// 		case 'White Cross':
+	// 		case 'F2L':
+	// 		case 'PLL Edges':
+	// 		case 'ALL':
+	// 		case undefined:
+	// 			return true;
+	// 		case 'OLL Edges':
+	// 		case 'OLL':
+	// 		case 'Yellow Cross':
+	// 			if (row || side == 1) return true;
+	// 			else return false;
+	// 		case 'Yellow Edges':
+	// 			if (row || side == 1 || col == 1 || slice == 1) return true;
+	// 			else return false;
+	// 		case 'PLL Corners':
+	// 			if (row || side == 1 || (col !== 1 && slice !== 1)) return true;
+	// 			else return false;
+	// 	}
+	// }
+	//
+	// function cubeletVisibleInSolutionStep(slice, row, col, solutionStep) {
+	// 	switch (solutionStep) {
+	// 		case 'Cross':
+	// 		case 'White Cross':
+	// 			if ((row && (slice == 1 || col == 1)) || (slice == 1 && col == 1)) return true;
+	// 			else return false;
+	// 		case 'F2L':
+	// 			if (row ||  (slice == 1 && col == 1)) return true;
+	// 			else return false;
+	// 		case 'OLL':
+	// 		case 'PLL Edges':
+	// 		case 'ALL':
+	// 		case undefined:
+	// 			return true;
+	// 		case 'PLL Corners':
+	// 			if (row ||  (slice == 1 && col == 1) || slice !== 1 || col !== 1) return true;
+	// 			else return false;
+	// 		case 'OLL Edges':
+	// 		case 'Yellow Cross':
+	// 		case 'Yellow Edges':
+	// 			if (row ||  slice == 1 || col == 1) return true;
+	// 			else return false;
+	// 	}
+	// }
+	//
+	// function generateCubeletColorMap(solutionStep) {
+	// 	var colors = [ERNO.BLUE, ERNO.YELLOW, ERNO.RED, ERNO.WHITE, ERNO.ORANGE, ERNO.GREEN];
+	//
+	// 	var cubelets = [];
+	// 	for (var slice = 0; slice < 3; ++slice) {
+	// 		for (var row = 0; row < 3; ++row) {
+	// 			for (var col = 0; col < 3; ++col) {
+	// 				var cubelet = [];
+	// 				for (var side = 0; side < 6; ++side) {
+	// 					if (sideIsSticker(slice, row, col, side)) {
+	// 						if (cubeletVisibleInSolutionStep(slice, row, col, solutionStep)) {
+	// 							if (sideVisibleInSolutionStep(slice, row, col, side, solutionStep)) {
+	// 								cubelet.push(colors[side]);
+	// 							} else {
+	// 								cubelet.push(ERNO.GRAY);
+	// 							}
+	// 						} else {
+	// 							cubelet.push(ERNO.GRAY);
+	// 						}
+	// 					} else cubelet.push(ERNO.COLORLESS);
+	// 				}
+	// 				cubelets.push(cubelet);
+	// 			}
+	// 		}
+	// 	}
+	// 	return cubelets;
+	// }
 
 	var container = document.getElementById( 'container' );
 	container.appendChild( cube.domElement );

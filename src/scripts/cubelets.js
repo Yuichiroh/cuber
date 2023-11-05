@@ -129,157 +129,152 @@ ERNO.Cubelet = function( cube, cubeletId, colors ){
 	//  We're about to loop through our colors[] Array
 	//  to build the six faces of our Cubelet.
 	//  Here's our overhead for that:
-
-	var extrovertedFaces = 0;
-	if( colors === undefined ) colors = [ W, O,  ,  , G, ];
-	this.faces = [];
-
-
-	//  Now let's map one color per side based on colors[].
-	//  Undefined values are allowed (and anticipated).
-	//  We need to loop through the colors[] Array "manually"
-	//  because Array.forEach() would skip the undefined entries.
-
-	for( var i = 0; i < 6; i ++ ){
+	this.setColors = function (colors) {
+		console.log("set colors")
+		var extrovertedFaces = 0;
+		if (colors === undefined) colors = [W, O, , , G,];
+		this.faces = [];
 
 
-		//  Before we create our face's THREE object
-		//  we need to know where it should be positioned and rotated.
-		// (This is based on our above positions and rotations map.)
+		//  Now let's map one color per side based on colors[].
+		//  Undefined values are allowed (and anticipated).
+		//  We need to loop through the colors[] Array "manually"
+		//  because Array.forEach() would skip the undefined entries.
 
-		var
-		color  = colors[ i ] || ERNO.COLORLESS;
-		
-
-		//  Each face is an object and keeps track of its original ID number
-		// (which is important because its address will change with each rotation)
-		//  its current color, and so on.
-
-		this.faces[ i ] = {};
-		this.faces[ i ].id = i;
-		this.faces[ i ].color = color;
-		
-
-		//  We're going to keep track of what face was what at the moment of initialization,
-		//  mostly for solving purposes.
-		//  This is particularly useful for Striegel's solver
-		//  which requires an UP normal.
-
-		this.faces[ i ].normal = ERNO.Direction.getNameById( i );
+		for (var i = 0; i < 6; i++) {
 
 
-	// 	//  FACE CONTAINER.
-	// 	//  This face of our Cubelet needs a DOM element for all the
-	// 	//  related DOM elements to be attached to.
+			//  Before we create our face's THREE object
+			//  we need to know where it should be positioned and rotated.
+			// (This is based on our above positions and rotations map.)
 
-	// 	var faceElement = document.createElement( 'div' );
-	// 	faceElement.classList.add( 'face' );
-	// 	faceElement.classList.add( 'face'+ ERNO.Direction.getNameById( i ).capitalize() );
-	// 	this.css3DObject.element.appendChild( faceElement );
-	// 	this.faces[i].element = faceElement;
+			var color = colors[i] || ERNO.COLORLESS;
 
 
+			//  Each face is an object and keeps track of its original ID number
+			// (which is important because its address will change with each rotation)
+			//  its current color, and so on.
 
-	// 	//  WIREFRAME.
-
-	// 	var wireframeElement = document.createElement( 'div' );
-	// 	wireframeElement.classList.add( 'wireframe' );
-	// 	faceElement.appendChild( wireframeElement );
-
-
-	// 	//  CUBELET ID.
-	// 	//  For debugging we want the ability to display this Cubelet's ID number
-	// 	//  with an underline (to make numbers like 6 and 9 legible upside-down).
-
-	// 	var idElement = document.createElement( 'div' );
-	// 	idElement.classList.add( 'id' );
-	// 	faceElement.appendChild( idElement );
-		
-	// 	var underlineElement = document.createElement( 'span' );
-	// 	underlineElement.classList.add( 'underline' );
-	// 	underlineElement.innerText = this.id;
-	// 	idElement.appendChild( underlineElement );
+			this.faces[i] = {};
+			this.faces[i].id = i;
+			this.faces[i].color = color;
 
 
-		//  INTROVERTED FACES.
-		//  If this face has no color sticker then it must be interior to the Cube.
-		//  That means in a normal state (no twisting happening) it is entirely hidden.
+			//  We're going to keep track of what face was what at the moment of initialization,
+			//  mostly for solving purposes.
+			//  This is particularly useful for Striegel's solver
+			//  which requires an UP normal.
 
-	this.faces[ i ].isIntrovert = color === ERNO.COLORLESS;
+			this.faces[i].normal = ERNO.Direction.getNameById(i);
 
-		if( color === ERNO.COLORLESS ){
 
-	// 		faceElement.classList.add( 'faceIntroverted' );
+			// 	//  FACE CONTAINER.
+			// 	//  This face of our Cubelet needs a DOM element for all the
+			// 	//  related DOM elements to be attached to.
 
+			// 	var faceElement = document.createElement( 'div' );
+			// 	faceElement.classList.add( 'face' );
+			// 	faceElement.classList.add( 'face'+ ERNO.Direction.getNameById( i ).capitalize() );
+			// 	this.css3DObject.element.appendChild( faceElement );
+			// 	this.faces[i].element = faceElement;
+
+
+			// 	//  WIREFRAME.
+
+			// 	var wireframeElement = document.createElement( 'div' );
+			// 	wireframeElement.classList.add( 'wireframe' );
+			// 	faceElement.appendChild( wireframeElement );
+
+
+			// 	//  CUBELET ID.
+			// 	//  For debugging we want the ability to display this Cubelet's ID number
+			// 	//  with an underline (to make numbers like 6 and 9 legible upside-down).
+
+			// 	var idElement = document.createElement( 'div' );
+			// 	idElement.classList.add( 'id' );
+			// 	faceElement.appendChild( idElement );
+
+			// 	var underlineElement = document.createElement( 'span' );
+			// 	underlineElement.classList.add( 'underline' );
+			// 	underlineElement.innerText = this.id;
+			// 	idElement.appendChild( underlineElement );
+
+
+			//  INTROVERTED FACES.
+			//  If this face has no color sticker then it must be interior to the Cube.
+			//  That means in a normal state (no twisting happening) it is entirely hidden.
+
+			this.faces[i].isIntrovert = color === ERNO.COLORLESS;
+
+			if (color === ERNO.COLORLESS) {
+
+				// 		faceElement.classList.add( 'faceIntroverted' );
+
+			}
+
+
+				//  EXTROVERTED FACES.
+				//  But if this face does have a color then we need to
+				//  create a sticker with that color
+			//  and also allow text to be placed on it.
+
+			else {
+
+
+				//  We're going to use the number of exposed sides
+				//  to determine below what 'type' of Cubelet this is:
+				//  Core, Center, Edge, or Corner.
+
+				extrovertedFaces++;
+
+
+				// 		faceElement.classList.add( 'faceExtroverted' );
+
+
+				// 		//  STICKER.
+				// 		//  You know, the color part that makes the Cube
+				// 		//  the most frustrating toy ever.
+
+				// 		var stickerElement = document.createElement( 'div' );
+				// 		stickerElement.classList.add( 'sticker' );
+				// 		stickerElement.classList.add( color.name );
+				// 		faceElement.appendChild( stickerElement );
+
+
+				// 		//  TEXT.
+				// 		//  One character per face, mostly for our branding.
+
+				// 		var textElement = document.createElement( 'div' );
+				// 		textElement.classList.add( 'text' );
+				// 		textElement.innerText = i;
+				// 		this.faces[ i ].text = textElement;
+				// 		faceElement.appendChild( textElement );
+
+			}
 		}
+		//  Now that we've run through our colors[] Array
+		//  and counted the number of extroverted sides
+		//  we can determine what 'type' of Cubelet this is.
 
+		this.type = [
 
-		//  EXTROVERTED FACES.
-		//  But if this face does have a color then we need to
-		//  create a sticker with that color
-		//  and also allow text to be placed on it.
+			'core',
+			'center',
+			'edge',
+			'corner'
 
-		else {
+		][ extrovertedFaces ]
 
+		//  Convience accessors for the Cubelet's faces.
+		//  What color is the left face? this.left() !!
 
-			//  We're going to use the number of exposed sides
-			//  to determine below what 'type' of Cubelet this is:
-			//  Core, Center, Edge, or Corner.
-
-			extrovertedFaces ++;
-
-
-	// 		faceElement.classList.add( 'faceExtroverted' );
-
-
-	// 		//  STICKER.
-	// 		//  You know, the color part that makes the Cube
-	// 		//  the most frustrating toy ever.
-
-	// 		var stickerElement = document.createElement( 'div' );
-	// 		stickerElement.classList.add( 'sticker' );
-	// 		stickerElement.classList.add( color.name );		
-	// 		faceElement.appendChild( stickerElement );
-
-
-	// 		//  TEXT.
-	// 		//  One character per face, mostly for our branding.
-
-	// 		var textElement = document.createElement( 'div' );
-	// 		textElement.classList.add( 'text' );
-	// 		textElement.innerText = i;
-	// 		this.faces[ i ].text = textElement;
-	// 		faceElement.appendChild( textElement );
-
-		}
-	}
-
-
-	//  Now that we've run through our colors[] Array
-	//  and counted the number of extroverted sides
-	//  we can determine what 'type' of Cubelet this is.
-
-	this.type = [
-
-		'core',
-		'center',
-		'edge',
-		'corner'
-
-	][ extrovertedFaces ]
-
-
-
-	//  Convience accessors for the Cubelet's faces.
-	//  What color is the left face? this.left() !!
-
-	this.front  	= this.faces[ 0 ]
+		this.front  	= this.faces[ 0 ]
 		this.up     = this.faces[ 1 ]
 		this.right  = this.faces[ 2 ]
 		this.down   = this.faces[ 3 ]
 		this.left   = this.faces[ 4 ]
 		this.back   = this.faces[ 5 ]
-		this.colors = 
+		this.colors =
 
 			( this.faces[ 0 ].color ? this.faces[ 0 ].color.initial : '-' ) +
 			( this.faces[ 1 ].color ? this.faces[ 1 ].color.initial : '-' ) +
@@ -288,8 +283,8 @@ ERNO.Cubelet = function( cube, cubeletId, colors ){
 			( this.faces[ 4 ].color ? this.faces[ 4 ].color.initial : '-' ) +
 			( this.faces[ 5 ].color ? this.faces[ 5 ].color.initial : '-' );
 
-
-
+	}
+	this.setColors(colors)
 
 	// this.front.element.style.transform =	"rotateX(   0deg ) translateZ( "+faceSpacing+"px ) rotateZ(   0deg )";
 	// this.up.element.style.transform = 		"rotateX(  90deg ) translateZ( "+faceSpacing+"px ) rotateZ(   0deg )";
@@ -309,7 +304,8 @@ ERNO.Cubelet = function( cube, cubeletId, colors ){
 	//  If this happens to be our logo-bearing Cubelet
 	//  we had better attach the logo to it!
 
-	this.isStickerCubelet = this.front.color && this.front.color.name === 'white' && this.type === 'center' 
+	// this.isStickerCubelet = this.front.color && this.front.color.name === 'white' && this.type === 'center'
+	this.isStickerCubelet = this.down.color && this.down.color.name === 'white' && this.type === 'center'
 
 
 
@@ -378,7 +374,7 @@ ERNO.extend( ERNO.Cubelet.prototype, {
 
 
 	//  Does this Cubelet contain a certain color?
-	//  If so, return a String decribing what face that color is on.
+	//  If so, return a String describing what face that color is on.
 	//  Otherwise return false.
 
 	hasColor: function( color ){

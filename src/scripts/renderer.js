@@ -443,9 +443,19 @@ ERNO.renderers.CSS3DCubelet.methods = (function(){
 			this.getFaceElements( ' .sticker' ).forEach( hideItem );
 			this.showingStickers = false;
 		},
+		hideSticker: function(color){
+
+			this.getFaceElements( ' .sticker.' + color ).forEach( hideItem );
+			this.showingStickers = false;
+		},
 		showStickers: function(){
 
 			this.getFaceElements( ' .sticker' ).forEach( showItem );
+			this.showingStickers = true;
+		},
+		showSticker: function(color){
+
+			this.getFaceElements( ' .sticker.' + color ).forEach( showItem );
 			this.showingStickers = true;
 		},
 		showWireframes: function(){

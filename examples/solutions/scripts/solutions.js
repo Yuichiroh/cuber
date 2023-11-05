@@ -1,4 +1,4 @@
-(function ($) {
+ (function ($) {
     $.fn.cube = function(solution, solutionStep) {
         var container;
         $(this).each(function (i, el) {

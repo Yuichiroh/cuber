@@ -251,6 +251,16 @@ ERNO.extend( ERNO.Group.prototype, {
 		this.cubelets.forEach( function( cubelet ){ cubelet.hideStickers() })
 		return this
 	},
+	showSticker: function(color){
+
+		this.cubelets.forEach( function( cubelet ){ cubelet.showSticker(color) })
+		return this
+	},
+	hideSticker: function(color){
+
+		this.cubelets.forEach( function( cubelet ){ cubelet.hideSticker(color) })
+		return this
+	},
 	showWireframes: function(){
 
 		this.cubelets.forEach( function( cubelet ){ cubelet.showWireframes() })
