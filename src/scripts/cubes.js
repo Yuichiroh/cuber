@@ -353,30 +353,6 @@ ERNO.Cube = function (parameters) {
             }
 
         }
-
-        // for (var slice = 0; slice < 3; ++slice) {
-        //     for (var row = 0; row < 3; ++row) {
-        //         for (var col = 0; col < 3; ++col) {
-        //             var cubeletID = slice * 9 + row * 3 + col
-        //             cubelets[cubeletID].showStickers();
-        //             for (var side = 0; side < 6; ++side) {
-        //                 if (this.sideIsSticker(slice, row, col, side)) {
-        //                     if (this.cubeletVisibleInSolutionStep(slice, row, col, solutionStep)) {
-        //                         if (this.sideVisibleInSolutionStep(slice, row, col, side, solutionStep)) {
-        //                             cubelets[cubeletID].showSticker(colors[side].name);
-        //
-        //                         } else {
-        //                             cubelets[cubeletID].hideSticker(colors[side].name);
-        //                         }
-        //                     } else {
-        //                         cubelets[cubeletID].hideSticker(colors[side].name);
-        //                     }
-        //                 } else cubelets[cubeletID].hideSticker(colors[side].name);
-        //
-        //             }
-        //         }
-        //     }
-        // }
     }
 
 
@@ -699,6 +675,7 @@ ERNO.Cube = function (parameters) {
 
     this.algDisplay = document.getElementById('alg');
     this.solutionStep = document.getElementById('type');
+    this.algMax = 28
 
     this.key2command = function (key) {
         if (key === key.toLowerCase())
@@ -717,7 +694,7 @@ ERNO.Cube = function (parameters) {
             console.log(key)
             if (key == ' ')
                 this.algDisplay.textContent = ""
-            else if ('1234567890'.indexOf(key) >= 0) {
+            else if ('12345670'.indexOf(key) >= 0) {
                 key2solutionStep = {
                     1: "Cross",
                     2: "F2L",
@@ -729,23 +706,16 @@ ERNO.Cube = function (parameters) {
                     0: "ALL",
                 }
                 this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key])
-                // parameters.cubeletColorMap = this.generateCubeletColorMap(key2solutionStep[key]);
-                console.log(key2solutionStep[key])
-                console.log(parameters.cubeletColorMap)
                 this.solutionStep.textContent = key2solutionStep[key]
-
-                // this.cubelets.forEach(function (cubelet, cubeletId) {
-                //     cubelet.setColors(parameters.cubeletColorMap[cubeletId]);
-                // }.bind(this));
-                console.log(this.cubelets[0].faces)
-                // this.init()
             } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
                 this.twist(command);
-                if (parameters.alg)
+                if (parameters.alg){
+                    var toolong = this.algDisplay.textContent.length - this.algMax
+                    if (toolong > 0)
+                        this.algDisplay.textContent = this.algDisplay.textContent.slice(toolong)
                     this.algDisplay.textContent += " " + this.key4vis[command]
-                // this.algDisplay.textContent = this.historyQueue.history
+                }
             } else if (key === '-') {
-                console.log(key)
                 this.undo()
             }
 

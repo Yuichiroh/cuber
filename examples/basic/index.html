@@ -1,113 +1,126 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-		<meta name="description" content="Rubik’s Cube">
-		<meta name="keywords" content="Erno Rubik’s Cube">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="description" content="Rubik’s Cube">
+    <meta name="keywords" content="Erno Rubik’s Cube">
 
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
+    <link rel="stylesheet" type="text/css" href="../../src/styles/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../../src/styles/cube.css">
+    <link rel="stylesheet" type="text/css" href="styles/base.css">
 
-		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../src/styles/base.css" />
-		<link rel="stylesheet" type="text/css" href="../../src/styles/cube.css">
-		<link rel="stylesheet" type="text/css" href="styles/base.css">
-
-		<link rel="icon" type="image/png" href="../../src/media/cuber-favicon-0064x0064.png">
-		<link rel="apple-touch-icon" href="../../src/media/cuber-favicon-0144x0144.png">
-
-
-		<title>Cuber Basic Example</title>
+    <link rel="icon" type="image/png" href="../../src/media/cuber-favicon-0064x0064.png">
+    <link rel="apple-touch-icon" href="../../src/media/cuber-favicon-0144x0144.png">
 
 
-
-		<!-- compiled cube code -->
-		<!-- <script charset="utf-8" src="build/cuber.js"></script> -->
-
-		<!-- compiled & minified cube code -->
-		<!-- <script charset="utf-8" src="build/cuber.min.js"></script> -->
+    <title>Cuber Basic Example</title>
 
 
+    <!-- compiled cube code -->
+    <!-- <script charset="utf-8" src="build/cuber.js"></script> -->
 
-		<script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
-
-
-		<!-- cube source code -->
-
-
-			<!--  Three.js  -->
-			<script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+    <!-- compiled & minified cube code -->
+    <!-- <script charset="utf-8" src="build/cuber.min.js"></script> -->
 
 
-			<!--  Here are the Cube guts. Enjoy.  -->
-			<script charset="utf-8" src="../../src/scripts/ERNO.js"></script>
-			<script charset="utf-8" src="https://cdn.rawgit.com/mrdoob/three.js/r84/examples/js/renderers/CSS3DRenderer.js"></script>
-			<script charset="utf-8" src="../../src/scripts/utils/utils.js"></script>
-			<script charset="utf-8" src="../../src/scripts/utils/Number.js"></script>
-			<script charset="utf-8" src="../../src/scripts/utils/String.js"></script>
-			<script charset="utf-8" src="../../src/scripts/utils/Array.js"></script>
-			<script charset="utf-8" src="../../src/scripts/colors.js"></script>
-			<script charset="utf-8" src="../../src/scripts/directions.js"></script>
-			<script charset="utf-8" src="../../src/scripts/queues.js"></script>
-			<script charset="utf-8" src="../../src/scripts/twists.js"></script>
-			<script charset="utf-8" src="../../src/scripts/cubelets.js"></script>
-			<script charset="utf-8" src="../../src/scripts/groups.js"></script>
-			<script charset="utf-8" src="../../src/scripts/slices.js"></script>
-			<script charset="utf-8" src="../../src/scripts/folds.js"></script>
-			<script charset="utf-8" src="../../src/scripts/projector.js"></script>
-			<script charset="utf-8" src="../../src/scripts/interaction.js"></script>
-			<script charset="utf-8" src="../../src/scripts/controls.js"></script>
-			<script charset="utf-8" src="../../src/scripts/cubes.js"></script>
-			<script charset="utf-8" src="../../src/scripts/solvers.js"></script>
-			<script charset="utf-8" src="../../src/scripts/renderer.js"></script>
+    <script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
 
-
-		<!-- implementation -->
-
-
-		<script charset="utf-8" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-		<script charset="utf-8" src="../../src/scripts/extras/renderers/iecss3d.js"></script>
-		<script charset="utf-8" src="../../src/scripts/extras/renderers/ierenderer.js"></script>
-		<script charset="utf-8" src="../../src/scripts/extras/controls/locked.js"></script>
-		<script charset="utf-8" src="../../src/scripts/extras/deviceMotion.js"></script>
-		<script charset="utf-8" src="scripts/main.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- cube source code -->
 
 
+    <!--  Three.js  -->
+    <script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
 
-	</head>
-	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="https://github.com/tstaylor7/cuber">Cuber</a>
-				</div>
-			</div>
-		</nav>
 
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-sm-3 col-md-2 sidebar">
-					<ul class="nav nav-sidebar">
-						<li><span>Examples</span></li>
-						<li class="active"><a href="./">Basic <span class="sr-only">(current)</span></a></li>
-						<li><a href="../solutions/">Solutions/Modal</a></li>
-					</ul>
-				</div>
+    <!--  Here are the Cube guts. Enjoy.  -->
+    <script charset="utf-8" src="../../src/scripts/ERNO.js"></script>
+    <script charset="utf-8"
+            src="https://cdn.rawgit.com/mrdoob/three.js/r84/examples/js/renderers/CSS3DRenderer.js"></script>
+    <script charset="utf-8" src="../../src/scripts/utils/utils.js"></script>
+    <script charset="utf-8" src="../../src/scripts/utils/Number.js"></script>
+    <script charset="utf-8" src="../../src/scripts/utils/String.js"></script>
+    <script charset="utf-8" src="../../src/scripts/utils/Array.js"></script>
+    <script charset="utf-8" src="../../src/scripts/colors.js"></script>
+    <script charset="utf-8" src="../../src/scripts/directions.js"></script>
+    <script charset="utf-8" src="../../src/scripts/queues.js"></script>
+    <script charset="utf-8" src="../../src/scripts/twists.js"></script>
+    <script charset="utf-8" src="../../src/scripts/cubelets.js"></script>
+    <script charset="utf-8" src="../../src/scripts/groups.js"></script>
+    <script charset="utf-8" src="../../src/scripts/slices.js"></script>
+    <script charset="utf-8" src="../../src/scripts/folds.js"></script>
+    <script charset="utf-8" src="../../src/scripts/projector.js"></script>
+    <script charset="utf-8" src="../../src/scripts/interaction.js"></script>
+    <script charset="utf-8" src="../../src/scripts/controls.js"></script>
+    <script charset="utf-8" src="../../src/scripts/cubes.js"></script>
+    <script charset="utf-8" src="../../src/scripts/solvers.js"></script>
+    <script charset="utf-8" src="../../src/scripts/renderer.js"></script>
 
-				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<h1 class="page-header">Basic Example</h1>
-					<div class="flex-filled">
-						<div id="container" class="singlebackgroundcolor"></div>
-						<div id="fail">
-							<h1>Sorry,</h1>
-							<h2>Cubers broken</h2>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+
+    <!-- implementation -->
+
+
+    <script charset="utf-8" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script charset="utf-8" src="../../src/scripts/extras/renderers/iecss3d.js"></script>
+    <script charset="utf-8" src="../../src/scripts/extras/renderers/ierenderer.js"></script>
+    <script charset="utf-8" src="../../src/scripts/extras/controls/locked.js"></script>
+    <script charset="utf-8" src="../../src/scripts/extras/deviceMotion.js"></script>
+    <script charset="utf-8" src="scripts/main.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand " href="#">Cuber</a>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="./" class="nav-link active" aria-current="page">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#home"></use>
+                        </svg>
+                        Basic
+                    </a>
+                </li>
+                <li>
+                    <a href="../solutions/" class="nav-link link-dark">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#speedometer2"></use>
+                        </svg>
+                        Solution
+                    </a>
+                </li>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 id="type">ALL</h1>
+            <div class="position-relative">
+                <h1 id="alg" class="text-center display-1 position-absolute start-50 translate-middle-x"></h1>
+            </div>
+            <div class="flex-filled">
+                <div id="container" class="singlebackgroundcolor"></div>
+                <div id="fail">
+                    <h1>Sorry,</h1>
+                    <h2>Cubers broken</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 </html>
