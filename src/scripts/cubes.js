@@ -579,7 +579,7 @@ ERNO.Cube = function (parameters) {
                 this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key])
                 this.solutionStep.textContent = key2solutionStep[key]
             } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
-                this.twist(command);
+                this.twist(new ERNO.Twist(command));
             } else if (key === '-') {
                 this.undo()
             } else if (key === '=') {
@@ -934,10 +934,10 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.undoing = false;
         this.twistQueue.add(command);
 
-        if (typeof (command) === 'string')
-            this.addHistoryString(this.command2vis[command])
+        if (command.degrees === undefined)
+            this.addHistoryString(this.command2vis[command.command])
         else {
-            console.log(command.degrees)
+            console.log("command", command)
             if (command.degrees.absolute() >= 90) {
                 var times = command.degrees.absolute() / 90
                 console.log(times)
