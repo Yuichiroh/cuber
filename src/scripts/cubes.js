@@ -884,11 +884,21 @@ ERNO.extend(ERNO.Cube.prototype, {
     undo: function () {
 
         if (this.twistQueue.history.length > 0) {
+            const move = this.twistQueue.undo().getInverse()
 
-            this.historyQueue.add(this.twistQueue.undo().getInverse());
+            this.historyQueue.add(move);
             this.undoing = true;
-
-            this.popHistoryString()
+            if (typeof (move) === 'string')
+                this.popHistoryString()
+            else {
+                console.log("undo, obj", move)
+                var times = move.degrees.absolute() / 90
+                console.log(times)
+                for (let i = 0; i < times; i++) {
+                    this.popHistoryString()
+                }
+            }
+            // this.popHistoryString()
         }
     },
 
@@ -898,8 +908,19 @@ ERNO.extend(ERNO.Cube.prototype, {
         if (this.twistQueue.future.length > 0) {
             this.undoing = true;
             this.historyQueue.empty();
-            this.addHistoryString(this.command2vis[this.twistQueue.future.first().command])
-            this.historyQueue.add(this.twistQueue.redo());
+            const move = this.twistQueue.future.first()
+            if (typeof (move) === 'string') {
+                this.addHistoryString(this.command2vis[move.command])
+                this.historyQueue.add(this.twistQueue.redo());
+            } else {
+                console.log("redo, obj", move)
+                var times = move.degrees.absolute() / 90
+                console.log(times)
+                this.historyQueue.add(this.twistQueue.redo());
+                for (let i = 0; i < times; i++) {
+                    this.addHistoryString(this.command2vis[move.command])
+                }
+            }
         }
 
     },
@@ -911,11 +932,19 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.historyQueue.empty();
         this.undoing = false;
         this.twistQueue.add(command);
-        console.log("twist", typeof(command))
-        if (typeof(command) === 'string')
+
+        if (typeof (command) === 'string')
             this.addHistoryString(this.command2vis[command])
-        else
-            this.addHistoryString(this.command2vis[command.command])
+        else {
+            console.log(command.degrees)
+            if (command.degrees.absolute() >= 90) {
+                var times = command.degrees.absolute() / 90
+                console.log(times)
+                for (let i = 0; i < times; i++) {
+                    this.addHistoryString(this.command2vis[command.command])
+                }
+            }
+        }
 
     },
 
