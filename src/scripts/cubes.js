@@ -148,7 +148,7 @@ ERNO.Cube = function (parameters) {
 
     //  If we shuffle, how shall we do it?
 
-    this.shuffleMethod = this.PRESERVE_LOGO;
+    this.shuffleMethod = this.HUMAN_FRIENDRY;
 
 
     //  Size matters? Cubelets will attempt to read these values.
@@ -169,6 +169,15 @@ ERNO.Cube = function (parameters) {
     this.camera = new THREE.PerspectiveCamera(FIELD_OF_VIEW, ASPECT_RATIO, NEAR, FAR);
     this.camera.position.z = this.size * 4;
 
+    this.solutionStep = document.getElementById('type');
+
+    this.algDisplay = document.getElementById('alg');
+    this.algMax = 40
+    this.showAlg = parameters.alg
+    this.algHistory = []
+    this.algFullHistory = []
+
+    this.lefty = false
 
     //	To do all the things normaly associated with a 3D object
     //	we'll need to borrow a few properties from Three.js.
@@ -230,7 +239,485 @@ ERNO.Cube = function (parameters) {
         this.cubelets.push(new ERNO.Cubelet(this, cubeletId, cubeletColorMap));
     }.bind(this));
 
-    this.changeCubeletsVisibility = function (cubelets, solutionStep) {
+
+    //  Mapping the Cube creates all the convenience shortcuts
+    //  that we will need later. (Demonstrated immediately below!)
+
+    //  A Rubik's Cube is composed of 27 cubelets arranged 3 x 3 x 3.
+    //  We need a map that relates these 27 locations to the 27 cubelets
+    //  such that we can ask questions like:
+    //  What colors are on the Front face of the cube? Etc.
+
+
+    var i;
+
+
+    //  Groups are simple collections of Cubelets.
+    //  Their position and rotation is irrelevant.
+
+    this.core = new ERNO.Group();
+    this.centers = new ERNO.Group();
+    this.edges = new ERNO.Group();
+    this.corners = new ERNO.Group();
+    this.crosses = new ERNO.Group();
+    this.cubelets.forEach(function (cubelet, index) {
+
+        if (cubelet.type === 'core') this.core.add(cubelet);
+        if (cubelet.type === 'center') this.centers.add(cubelet);
+        if (cubelet.type === 'edge') this.edges.add(cubelet);
+        if (cubelet.type === 'corner') this.corners.add(cubelet);
+        if (cubelet.type === 'center' || cubelet.type === 'edge') this.crosses.add(cubelet);
+
+    }.bind(this));
+
+    //	Now we'll create some slices. A slice represents a 3x3 grid of cubelets.
+    //	Slices are Groups with purpose; they are rotate-able!
+
+    //  Slices that can rotate about the X-axis:
+
+    this.left = new ERNO.Slice(
+        [24, 21, 18,
+            15, 12, 9,
+            6, 3, 0], this
+    )
+    this.left.name = 'left';
+    this.middle = new ERNO.Slice(
+        [25, 22, 19,
+            16, 13, 10,
+            7, 4, 1], this
+    )
+    this.middle.name = 'middle';
+    this.right = new ERNO.Slice(
+        [2, 11, 20,
+            5, 14, 23,
+            8, 17, 26], this
+    )
+    this.right.name = 'right';
+    this.right.neighbour = this.middle;
+    this.left.neighbour = this.middle;
+
+    this.dleft = new ERNO.Slice(
+        [24, 21, 18,
+            15, 12, 9,
+            6, 3, 0,
+            25, 22, 19,
+            16, 13, 10,
+            7, 4, 1], this
+    )
+    this.dleft.name = 'doubleleft';
+    this.dright = new ERNO.Slice(
+        [2, 11, 20,
+            5, 14, 23,
+            8, 17, 26,
+            25, 22, 19,
+            16, 13, 10,
+            7, 4, 1], this
+    )
+    this.dright.name = 'doubleright';
+
+    //  Slices that can rotate about the Y-axis:
+
+    this.up = new ERNO.Slice(
+        [18, 19, 20,
+            9, 10, 11,
+            0, 1, 2], this
+    )
+    this.up.name = 'up';
+    this.equator = new ERNO.Slice(
+        [21, 22, 23,
+            12, 13, 14,
+            3, 4, 5], this
+    )
+    this.equator.name = 'equator';
+    this.down = new ERNO.Slice(
+        [8, 17, 26,
+            7, 16, 25,
+            6, 15, 24], this
+    )
+    this.down.name = 'down';
+    this.down.neighbour = this.equator;
+    this.up.neighbour = this.equator;
+
+    this.dup = new ERNO.Slice(
+        [18, 19, 20,
+            9, 10, 11,
+            0, 1, 2,
+            21, 22, 23,
+            12, 13, 14,
+            3, 4, 5], this
+    )
+    this.dup.name = 'doubleup';
+    this.ddown = new ERNO.Slice(
+        [8, 17, 26,
+            7, 16, 25,
+            6, 15, 24,
+            21, 22, 23,
+            12, 13, 14,
+            3, 4, 5], this
+    )
+    this.ddown.name = 'doubledown';
+
+    //  These are Slices that can rotate about the Z-axis:
+    this.front = new ERNO.Slice(
+        [0, 1, 2,
+            3, 4, 5,
+            6, 7, 8], this
+    )
+    this.front.name = 'front';
+    this.standing = new ERNO.Slice(
+        [9, 10, 11,
+            12, 13, 14,
+            15, 16, 17], this
+    )
+    this.standing.name = 'standing';
+    this.back = new ERNO.Slice(
+        [26, 23, 20,
+            25, 22, 19,
+            24, 21, 18], this
+    )
+    this.back.name = 'back';
+    this.back.neighbour = this.standing;
+    this.front.neighbour = this.standing;
+
+    this.dfront = new ERNO.Slice(
+        [0, 1, 2,
+            3, 4, 5,
+            6, 7, 8,
+            9, 10, 11,
+            12, 13, 14,
+            15, 16, 17], this
+    )
+    this.dfront.name = 'doublefront';
+    this.dback = new ERNO.Slice(
+        [26, 23, 20,
+            25, 22, 19,
+            24, 21, 18,
+            9, 10, 11,
+            12, 13, 14,
+            15, 16, 17], this
+    )
+    this.dback.name = 'doubleback';
+
+    //  Faces .... special kind of Slice!
+
+    this.faces = [this.front, this.up, this.right, this.down, this.left, this.back];
+
+
+    this.slices = [this.left, this.middle, this.right, this.down, this.equator, this.up, this.back, this.standing, this.front];
+
+
+    // 	We also probably want a handle on any update events that occur, for example, when a slice is rotated
+    var onSliceRotated = function (evt) {
+        this.dispatchEvent({
+            type: 'onTwistComplete',
+            slice: evt.target
+        });
+    }.bind(this);
+
+    this.slices.forEach(function (slice) {
+        slice.addEventListener('change', onSliceRotated);
+    });
+
+
+    // Dictionary to lookup slice
+    var allIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+    this.slicesDictionary = {
+        'f': this.front,
+        's': this.standing,
+        'b': this.back,
+
+        'u': this.up,
+        'e': this.equator,
+        'd': this.down,
+
+        'r': this.right,
+        'm': this.middle,
+        'l': this.left,
+
+        'a': this.dleft,
+        'c': this.dright,
+        'g': this.dup,
+        'h': this.ddown,
+        'i': this.dfront,
+        'j': this.dback,
+
+        //	Here we defined some arbitrary groups.
+        //	Technically they're not really slices in the usual sense,
+        //	there are however a few things about slices that we need,
+        //	like the ability to rotate about an axis, therefore for all
+        //	intents and purposes, we'll call them a slice
+
+        'x': new ERNO.Slice(allIndices, this),
+        'y': new ERNO.Slice(allIndices, this),
+        'z': new ERNO.Slice(allIndices, this)
+    }
+
+
+    // Internally we have the ability to hide any invisible faces,
+    // When a slice is rotated we determine what faces should be visible
+    // so the cube doesn't look broken. This happend every time a slice is rotated.
+    // Rotating Certain slices, such as the group slices never show internal faces.
+
+    this.slicesDictionary.x.ableToHideInternalFaces = false;
+    this.slicesDictionary.y.ableToHideInternalFaces = false;
+    this.slicesDictionary.z.ableToHideInternalFaces = false;
+
+
+    //	For the x,y and z groups we've defined above,
+    //	we'll need to manually set an axis since once can't be automatically computed
+
+    this.slicesDictionary.x.axis.set(-1, 0, 0);
+    this.slicesDictionary.y.axis.set(0, -1, 0);
+    this.slicesDictionary.z.axis.set(0, 0, -1);
+
+
+    //  Good to let each Cubelet know where it exists
+
+    this.cubelets.forEach(function (cubelet, i) {
+        cubelet.setAddress(i);
+    });
+
+
+    // 	RENDERER
+    //	Create a renderer object from the renderer factory.
+    // 	The renderFactory is a function that creates a renderer object
+
+    this.renderer = renderFactory(this.cubelets, this);
+    this.domElement = this.renderer.domElement;
+    this.domElement.classList.add('cube');
+    this.domElement.style.fontSize = this.cubeletSize + 'px';
+
+    this.autoRotateObj3D.add(this.object3D);
+
+
+    if (this.hideInvisibleFaces) this.hideIntroverts(null, true);
+
+    //	The Interaction class provides all the nifty mouse picking stuff.
+    //	It's responsible for figuring out what cube slice is supposed to rotate
+    //	and in what direction.
+
+    this.mouseInteraction = new ERNO.Interaction(this, this.camera, this.domElement);
+    this.mouseInteraction.enabled = this.mouseControlsEnabled;
+
+
+    this.mouseInteraction.addEventListener('click', function (evt) {
+        this.dispatchEvent({
+            type: "click",
+            cubelet: evt.cubelet,
+            face: evt.face
+        });
+    }.bind(this));
+
+
+    //	set up interactive controls
+    //	The Controls class rotates the entire cube around using an arcball implementation.
+    //	You could override this with a different style of control
+
+    this.controls = new (parameters.controls || ERNO.Controls)(this, this.camera, this.domElement);
+    this.controls.enabled = this.mouseControlsEnabled;
+
+
+    //  We need to map our folds separately from Cube.map()
+    //  because we only want folds mapped at creation time.
+    //  Remapping folds with each Cube.twist() would get weird...
+
+    this.folds = [
+        new ERNO.Fold(this.front, this.right),
+        new ERNO.Fold(this.left, this.up),
+        new ERNO.Fold(this.down, this.back)
+    ];
+
+
+    //  Enable some "Hero" text for this Cube.
+
+    // this.setText( 'BEYONDRUBIKs  CUBE', 0 );
+    // this.setText( 'BEYONDRUBIKs  CUBE', 1 );
+    // this.setText( 'BEYONDRUBIKs  CUBE', 2 );
+
+
+    // 	Define a default size for our cube, this will be resized to 100%
+    //	of it's containing dom element during the render.
+    this.setSize(400, 200);
+
+
+    //  Get ready for major loop-age.
+    //  Our Cube checks these booleans at 60fps.
+
+    this.loop = this.loop.bind(this);
+    requestAnimationFrame(this.loop);
+
+
+    //	The cube needs to respond to user interaction and react accordingly.
+    //	We'll set up a few event below to listen for specific commands,
+
+    //  Enable key commands for our Cube.
+
+    document.addEventListener('keypress', function (event) {
+        if (event.target.tagName.toLowerCase() !== 'input' &&
+            event.target.tagName.toLowerCase() !== 'textarea' &&
+            !this.mouseInteraction.active &&
+            this.keyboardControlsEnabled) {
+            var key = String.fromCharCode(event.which);
+            var command = this.key2command(key)
+            if (key == ' ') {
+                this.algDisplay.textContent = ""
+                this.algHistory = []
+                this.algFullHistory = []
+            } else if ('1234567890'.indexOf(key) >= 0) {
+                key2solutionStep = {
+                    1: "Cross",
+                    2: "F2L",
+                    3: "OLL Edges",
+                    4: "OLL",
+                    5: "PLL Corners",
+                    6: "PLL Edges",
+                    7: "PLL",
+                    8: "Yellow Cross",
+                    9: "Last Layer",
+                    0: "ALL",
+                }
+                this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key])
+                this.solutionStep.textContent = key2solutionStep[key]
+            } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
+                this.twist(command);
+            } else if (key === '-') {
+                this.undo()
+            } else if (key === '=') {
+                this.redo()
+            } else if (key === 'v') {
+                this.showAlg = !this.showAlg
+                if (this.algDisplay.style.display === "none")
+                    this.algDisplay.style.display = "block";
+                else
+                    this.algDisplay.style.display = "none";
+            } else if (key === 'p') {
+                if (this.lefty) {
+                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * -0.20, Math.PI * 0.0);
+                    new TWEEN.Tween(this.rotation)
+                        .to({
+                            y: fixedOrientation.y
+                        }, 100)
+                        .start();
+                } else {
+                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * 0.20, Math.PI * 0.0);
+                    new TWEEN.Tween(this.rotation)
+                        .to({
+                            y: fixedOrientation.y
+                        }, 100)
+                        .start();
+                }
+                this.lefty = !this.lefty
+            } else if (key === '?') {
+                this.algDisplay.textContent = ""
+                this.algHistory = []
+                this.algFullHistory = []
+                this.shuffle(30)
+            } else {
+                console.log(key)
+            }
+
+        }
+    }.bind(this));
+
+
+    this.key2command = function (key) {
+        if (key === key.toLowerCase())
+            return key.toUpperCase();
+        else
+            return key.toLowerCase();
+    }
+
+    this.command2vis = {
+        l: "L'",
+        r: "R'",
+        u: "U'",
+        d: "D'",
+        f: "F'",
+        b: "B'",
+        L: "L",
+        R: "R",
+        U: "U",
+        D: "D",
+        F: "F",
+        B: "B",
+        a: "l'",
+        c: "r'",
+        g: "u'",
+        h: "d'",
+        i: "f'",
+        j: "b'",
+        A: 'l',
+        C: 'r',
+        G: 'u',
+        H: 'd',
+        I: 'f',
+        J: 'b',
+        m: "M'",
+        s: "S'",
+        e: "E'",
+        M: "M",
+        S: "S",
+        E: "E",
+        x: "x'",
+        y: "y'",
+        z: "z'",
+        X: "x",
+        Y: "y",
+        Z: "z",
+    };
+
+}
+
+
+ERNO.Cube.prototype = Object.create(ERNO.Group.prototype);
+ERNO.Cube.prototype.constructor = ERNO.Cube;
+ERNO.extend(ERNO.Cube.prototype, {
+
+    addHistoryStringSub: function (move) {
+        if (move === this.algHistory.last()) {
+            this.algHistory.push(this.algHistory.pop() + "2")
+        } else if (move === this.algHistory.last() + "'" || move + "'" === this.algHistory.last()) {
+            this.algHistory.pop()
+        } else if (move[0] + "2" === this.algHistory.last() || move[0] + "'2" === this.algHistory.last()) {
+            this.algHistory.pop()
+            if (move.length > 1) {
+                this.algHistory.push(move[0])
+            } else {
+                this.algHistory.push(move + "'")
+            }
+        } else {
+            this.algHistory.push(move)
+        }
+    },
+
+    showHistoryString: function () {
+        this.algDisplay.textContent = this.algHistory.join(" ")
+        var toolong = this.algDisplay.textContent.length - this.algMax
+        if (toolong > 0)
+            this.algDisplay.textContent = this.algDisplay.textContent.slice(toolong)
+    },
+
+    addHistoryString: function (move) {
+        this.addHistoryStringSub(move);
+        this.algFullHistory.push(move)
+        this.showHistoryString();
+    },
+
+    reconstructHistoryString: function () {
+        this.algHistory = []
+        for (let move of this.algFullHistory) {
+            this.addHistoryStringSub(move);
+        }
+
+        this.showHistoryString();
+    },
+
+    popHistoryString: function () {
+        this.algFullHistory.pop()
+        this.reconstructHistoryString()
+    },
+
+    changeCubeletsVisibility: function (cubelets, solutionStep) {
         this.algDisplay.textContent = ""
         for (var cubelet of cubelets) {
             cubelet.showStickers()
@@ -305,449 +792,11 @@ ERNO.Cube = function (parameters) {
             }
 
         }
-    }
-
-
-    //  Mapping the Cube creates all the convenience shortcuts
-    //  that we will need later. (Demonstrated immediately below!)
-
-    //  A Rubik's Cube is composed of 27 cubelets arranged 3 x 3 x 3.
-    //  We need a map that relates these 27 locations to the 27 cubelets
-    //  such that we can ask questions like:
-    //  What colors are on the Front face of the cube? Etc.
-
-
-    var i;
-
-
-    this.init = function () {
-
-        //  Groups are simple collections of Cubelets.
-        //  Their position and rotation is irrelevant.
-
-        this.core = new ERNO.Group();
-        this.centers = new ERNO.Group();
-        this.edges = new ERNO.Group();
-        this.corners = new ERNO.Group();
-        this.crosses = new ERNO.Group();
-        this.cubelets.forEach(function (cubelet, index) {
-
-            if (cubelet.type === 'core') this.core.add(cubelet);
-            if (cubelet.type === 'center') this.centers.add(cubelet);
-            if (cubelet.type === 'edge') this.edges.add(cubelet);
-            if (cubelet.type === 'corner') this.corners.add(cubelet);
-            if (cubelet.type === 'center' || cubelet.type === 'edge') this.crosses.add(cubelet);
-
-        }.bind(this));
-
-        //	Now we'll create some slices. A slice represents a 3x3 grid of cubelets.
-        //	Slices are Groups with purpose; they are rotate-able!
-
-        //  Slices that can rotate about the X-axis:
-
-        this.left = new ERNO.Slice(
-            [24, 21, 18,
-                15, 12, 9,
-                6, 3, 0], this
-        )
-        this.left.name = 'left';
-        this.middle = new ERNO.Slice(
-            [25, 22, 19,
-                16, 13, 10,
-                7, 4, 1], this
-        )
-        this.middle.name = 'middle';
-        this.right = new ERNO.Slice(
-            [2, 11, 20,
-                5, 14, 23,
-                8, 17, 26], this
-        )
-        this.right.name = 'right';
-        this.right.neighbour = this.middle;
-        this.left.neighbour = this.middle;
-
-        this.dleft = new ERNO.Slice(
-            [24, 21, 18,
-                15, 12, 9,
-                6, 3, 0,
-                25, 22, 19,
-                16, 13, 10,
-                7, 4, 1], this
-        )
-        this.dleft.name = 'doubleleft';
-        this.dright = new ERNO.Slice(
-            [2, 11, 20,
-                5, 14, 23,
-                8, 17, 26,
-                25, 22, 19,
-                16, 13, 10,
-                7, 4, 1], this
-        )
-        this.dright.name = 'doubleright';
-
-        //  Slices that can rotate about the Y-axis:
-
-        this.up = new ERNO.Slice(
-            [18, 19, 20,
-                9, 10, 11,
-                0, 1, 2], this
-        )
-        this.up.name = 'up';
-        this.equator = new ERNO.Slice(
-            [21, 22, 23,
-                12, 13, 14,
-                3, 4, 5], this
-        )
-        this.equator.name = 'equator';
-        this.down = new ERNO.Slice(
-            [8, 17, 26,
-                7, 16, 25,
-                6, 15, 24], this
-        )
-        this.down.name = 'down';
-        this.down.neighbour = this.equator;
-        this.up.neighbour = this.equator;
-
-        this.dup = new ERNO.Slice(
-            [18, 19, 20,
-                9, 10, 11,
-                0, 1, 2,
-                21, 22, 23,
-                12, 13, 14,
-                3, 4, 5], this
-        )
-        this.dup.name = 'doubleup';
-        this.ddown = new ERNO.Slice(
-            [8, 17, 26,
-                7, 16, 25,
-                6, 15, 24,
-                21, 22, 23,
-                12, 13, 14,
-                3, 4, 5], this
-        )
-        this.ddown.name = 'doubledown';
-
-        //  These are Slices that can rotate about the Z-axis:
-        this.front = new ERNO.Slice(
-            [0, 1, 2,
-                3, 4, 5,
-                6, 7, 8], this
-        )
-        this.front.name = 'front';
-        this.standing = new ERNO.Slice(
-            [9, 10, 11,
-                12, 13, 14,
-                15, 16, 17], this
-        )
-        this.standing.name = 'standing';
-        this.back = new ERNO.Slice(
-            [26, 23, 20,
-                25, 22, 19,
-                24, 21, 18], this
-        )
-        this.back.name = 'back';
-        this.back.neighbour = this.standing;
-        this.front.neighbour = this.standing;
-
-        this.dfront = new ERNO.Slice(
-            [0, 1, 2,
-                3, 4, 5,
-                6, 7, 8,
-                9, 10, 11,
-                12, 13, 14,
-                15, 16, 17], this
-        )
-        this.dfront.name = 'doublefront';
-        this.dback = new ERNO.Slice(
-            [26, 23, 20,
-                25, 22, 19,
-                24, 21, 18,
-                9, 10, 11,
-                12, 13, 14,
-                15, 16, 17], this
-        )
-        this.dback.name = 'doubleback';
-
-        //  Faces .... special kind of Slice!
-
-        this.faces = [this.front, this.up, this.right, this.down, this.left, this.back];
-
-
-        this.slices = [this.left, this.middle, this.right, this.down, this.equator, this.up, this.back, this.standing, this.front];
-
-
-        // 	We also probably want a handle on any update events that occur, for example, when a slice is rotated
-        var onSliceRotated = function (evt) {
-            this.dispatchEvent({
-                type: 'onTwistComplete',
-                slice: evt.target
-            });
-        }.bind(this);
-
-        this.slices.forEach(function (slice) {
-            slice.addEventListener('change', onSliceRotated);
-        });
-
-
-        // Dictionary to lookup slice
-        var allIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
-        this.slicesDictionary = {
-            'f': this.front,
-            's': this.standing,
-            'b': this.back,
-
-            'u': this.up,
-            'e': this.equator,
-            'd': this.down,
-
-            'r': this.right,
-            'm': this.middle,
-            'l': this.left,
-
-            'a': this.dleft,
-            'c': this.dright,
-            'g': this.dup,
-            'h': this.ddown,
-            'i': this.dfront,
-            'j': this.dback,
-
-            //	Here we defined some arbitrary groups.
-            //	Technically they're not really slices in the usual sense,
-            //	there are however a few things about slices that we need,
-            //	like the ability to rotate about an axis, therefore for all
-            //	intents and purposes, we'll call them a slice
-
-            'x': new ERNO.Slice(allIndices, this),
-            'y': new ERNO.Slice(allIndices, this),
-            'z': new ERNO.Slice(allIndices, this)
-        }
-
-
-        // Internally we have the ability to hide any invisible faces,
-        // When a slice is rotated we determine what faces should be visible
-        // so the cube doesn't look broken. This happend every time a slice is rotated.
-        // Rotating Certain slices, such as the group slices never show internal faces.
-
-        this.slicesDictionary.x.ableToHideInternalFaces = false;
-        this.slicesDictionary.y.ableToHideInternalFaces = false;
-        this.slicesDictionary.z.ableToHideInternalFaces = false;
-
-
-        //	For the x,y and z groups we've defined above,
-        //	we'll need to manually set an axis since once can't be automatically computed
-
-        this.slicesDictionary.x.axis.set(-1, 0, 0);
-        this.slicesDictionary.y.axis.set(0, -1, 0);
-        this.slicesDictionary.z.axis.set(0, 0, -1);
-
-
-        //  Good to let each Cubelet know where it exists
-
-        this.cubelets.forEach(function (cubelet, i) {
-            cubelet.setAddress(i);
-        });
-
-
-        // 	RENDERER
-        //	Create a renderer object from the renderer factory.
-        // 	The renderFactory is a function that creates a renderer object
-
-        this.renderer = renderFactory(this.cubelets, this);
-        this.domElement = this.renderer.domElement;
-        this.domElement.classList.add('cube');
-        this.domElement.style.fontSize = this.cubeletSize + 'px';
-
-        this.autoRotateObj3D.add(this.object3D);
-
-
-        if (this.hideInvisibleFaces) this.hideIntroverts(null, true);
-
-        //	The Interaction class provides all the nifty mouse picking stuff.
-        //	It's responsible for figuring out what cube slice is supposed to rotate
-        //	and in what direction.
-
-        this.mouseInteraction = new ERNO.Interaction(this, this.camera, this.domElement);
-        this.mouseInteraction.enabled = this.mouseControlsEnabled;
-
-
-        this.mouseInteraction.addEventListener('click', function (evt) {
-            this.dispatchEvent({
-                type: "click",
-                cubelet: evt.cubelet,
-                face: evt.face
-            });
-        }.bind(this));
-
-
-        //	set up interactive controls
-        //	The Controls class rotates the entire cube around using an arcball implementation.
-        //	You could override this with a different style of control
-
-        this.controls = new (parameters.controls || ERNO.Controls)(this, this.camera, this.domElement);
-        this.controls.enabled = this.mouseControlsEnabled;
-
-
-        //  We need to map our folds separately from Cube.map()
-        //  because we only want folds mapped at creation time.
-        //  Remapping folds with each Cube.twist() would get weird...
-
-        this.folds = [
-            new ERNO.Fold(this.front, this.right),
-            new ERNO.Fold(this.left, this.up),
-            new ERNO.Fold(this.down, this.back)
-        ];
-
-    }
-    this.init()
-
-
-    //  Enable some "Hero" text for this Cube.
-
-    // this.setText( 'BEYONDRUBIKs  CUBE', 0 );
-    // this.setText( 'BEYONDRUBIKs  CUBE', 1 );
-    // this.setText( 'BEYONDRUBIKs  CUBE', 2 );
-
-
-    // 	Define a default size for our cube, this will be resized to 100%
-    //	of it's containing dom element during the render.
-    this.setSize(400, 200);
-
-
-    //  Get ready for major loop-age.
-    //  Our Cube checks these booleans at 60fps.
-
-    this.loop = this.loop.bind(this);
-    requestAnimationFrame(this.loop);
-
-
-    //	The cube needs to respond to user interaction and react accordingly.
-    //	We'll set up a few event below to listen for specific commands,
-
-    //  Enable key commands for our Cube.
-
-    this.algDisplay = document.getElementById('alg');
-    this.solutionStep = document.getElementById('type');
-    this.lefty = false
-    this.algMax = 40
-
-    this.key2command = function (key) {
-        if (key === key.toLowerCase())
-            return key.toUpperCase();
-        else
-            return key.toLowerCase();
-    }
-
-    document.addEventListener('keypress', function (event) {
-        if (event.target.tagName.toLowerCase() !== 'input' &&
-            event.target.tagName.toLowerCase() !== 'textarea' &&
-            !this.mouseInteraction.active &&
-            this.keyboardControlsEnabled) {
-            var key = String.fromCharCode(event.which);
-            var command = this.key2command(key)
-            console.log(key)
-            if (key == ' ')
-                this.algDisplay.textContent = ""
-            else if ('1234567890'.indexOf(key) >= 0) {
-                key2solutionStep = {
-                    1: "Cross",
-                    2: "F2L",
-                    3: "OLL Edges",
-                    4: "OLL",
-                    5: "PLL Corners",
-                    6: "PLL Edges",
-                    7: "PLL",
-                    8: "Yellow Cross",
-                    9: "Last Layer",
-                    0: "ALL",
-                }
-                this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key])
-                this.solutionStep.textContent = key2solutionStep[key]
-            } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
-                this.twist(command);
-                if (parameters.alg) {
-                    var toolong = this.algDisplay.textContent.length - this.algMax
-                    if (toolong > 0)
-                        this.algDisplay.textContent = this.algDisplay.textContent.slice(toolong)
-                    this.algDisplay.textContent += " " + this.key4vis[command]
-                }
-            } else if (key === '-') {
-                this.undo()
-            } else if (key === 'v') {
-                parameters.alg = !parameters.alg
-                this.algDisplay.textContent = ""
-            } else if (key === 'p') {
-                if (this.lefty) {
-                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * -0.20, Math.PI * 0.0);
-                    new TWEEN.Tween(this.rotation)
-                        .to({
-                            y: fixedOrientation.y
-                        }, 100)
-                        .start();
-                } else {
-                    var fixedOrientation = new THREE.Euler(Math.PI * 0.2, Math.PI * 0.20, Math.PI * 0.0);
-                    new TWEEN.Tween(this.rotation)
-                        .to({
-                            y: fixedOrientation.y
-                        }, 100)
-                        .start();
-                }
-                this.lefty = !this.lefty
-            } else {
-                console.log(key)
-            }
-
-        }
-    }.bind(this));
-
-
-    this.key4vis = {
-        l: "L'",
-        r: "R'",
-        u: "U'",
-        d: "D'",
-        f: "F'",
-        b: "B'",
-        L: "L",
-        R: "R",
-        U: "U",
-        D: "D",
-        F: "F",
-        B: "B",
-        a: "l'",
-        c: "r'",
-        g: "u'",
-        h: "d'",
-        i: "f'",
-        j: "b'",
-        A: 'l',
-        C: 'r',
-        G: 'u',
-        H: 'd',
-        I: 'f',
-        J: 'b',
-        m: "M'",
-        s: "S'",
-        e: "E'",
-        M: "M",
-        S: "S",
-        E: "E",
-        x: "x'",
-        y: "y'",
-        z: "z'",
-        X: "x",
-        Y: "y",
-        Z: "z",
-    };
-
-}
-
-
-ERNO.Cube.prototype = Object.create(ERNO.Group.prototype);
-ERNO.Cube.prototype.constructor = ERNO.Cube;
-ERNO.extend(ERNO.Cube.prototype, {
+    },
 
 
     shuffle: function (amount, sequence) {
+        // const algDisplay = document.getElementById('alg');
 
 
         //	How many times should we shuffle?
@@ -803,7 +852,6 @@ ERNO.extend(ERNO.Cube.prototype, {
 
         }
 
-
         //	By stashing the last move in our shuffle sequence, we can
         // 	later check if the shuffling is complete
         this.finalShuffle = move;
@@ -840,19 +888,18 @@ ERNO.extend(ERNO.Cube.prototype, {
             this.historyQueue.add(this.twistQueue.undo().getInverse());
             this.undoing = true;
 
+            this.popHistoryString()
         }
-
     },
 
 
     redo: function () {
 
         if (this.twistQueue.future.length > 0) {
-
             this.undoing = true;
             this.historyQueue.empty();
+            this.addHistoryString(this.command2vis[this.twistQueue.future.first().command])
             this.historyQueue.add(this.twistQueue.redo());
-
         }
 
     },
@@ -864,7 +911,7 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.historyQueue.empty();
         this.undoing = false;
         this.twistQueue.add(command);
-
+        this.addHistoryString(this.command2vis[command])
     },
 
 
@@ -1007,6 +1054,7 @@ ERNO.extend(ERNO.Cube.prototype, {
 
     //  Shuffle methods.
 
+    HUMAN_FRIENDRY: 'RrLlUuDdFfBb',             //  Preserve the logo position and rotation.
     PRESERVE_LOGO: 'RrLlUuDdSsBb',             //  Preserve the logo position and rotation.
     ALL_SLICES: 'RrMmLlUuEeDdFfSsBb',       //  Allow all slices to rotate.
     EVERYTHING: 'XxRrMmLlYyUuEeDdZzFfSsBb', //  Allow all slices, and also full cube X, Y, and Z rotations.

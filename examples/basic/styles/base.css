@@ -2,12 +2,13 @@ body {
     padding: 0px;
 }
 
-h1, h2 {
+h1, h2, p {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     /*font-size: 12px;*/
     /*line-height: 15px;*/
     /*color: rgba(255, 255, 255, 0.7);*/
 }
+
 
 .graydient {
 

@@ -1,36 +1,89 @@
-Cuber
+Cuber+
 ==============================================================================
 
-Cuber is a Rubik's cube simulator written in javascript with a little bit of three.js thrown in for good measure. It uses CSS 3D transforms and has a programmatic API, and has different rendering outputs.
+Cuber+ is a modified version of [Cuber](https://github.com/tstaylor7/cuber), which is interactive 3D Rubik's cube simulator written in javascript.
+Cuber+ implements some useful functions for instructing the CFOP method to learners in very beginning stage. 
+
+![img.png](img.png)
+![img_1.png](img_1.png)
+
+## Getting started
+
+Cloning the project and then open [./examples/basic/simple.html](./examples/basic/simple.html) file.
+
+## How to use
+
+### Display mode
+
+You can change a display mode for each CFOP step by pressing [0-9] keys.
+
+- 0: Standard mode
+- 1: Cross mode
+- 2: F2L mode
+- 3: Edge OLL mode
+- 4: OLL mode
+- 5: Corner PLL mode
+- 6: Edge PLL mode
+- 7: PLL mode (same as standard mode)
+- 8: Yellow Cross mode (Edge OLL mode with side stickers)
+- 9: Last Layer mode (only show a top layer cubelets and center cubelets) 
+
+### Rotation shortcuts
+
+NOTION: For ease of input on a keyboard, the notation typically used in algorithms has been altered. 
+However, the moving history displayed in the monitor is presented with a standard notation.
 
 
-### Getting started
+Note that uppercases and lowercases is altered to simplify the keyboard input. 
 
-Download the [minified file](/build/cuber.min.js), the [css](/build/cube.css) and include it in your project.
+- u, d, r, l, f, b: rotate clockwise a specified face.
+- U, D, R, L, F, B: rotate counter-clockwise a specified face.
+- g, h, c, a, i, j: rotate clockwise specified two faces (each corresponds to u, d, r, l, f, b, respectively).
+- G, H, C, A, I, J: rotate counter-clockwise specified two faces (each corresponds to u', d', r', l', f', b', respectively).
+- m, s, e: slice middle layer clockwise
+- M, S, E:  slice middle layer counter-clockwise
+- \- (minus key) : undo rotation
+- = (equal key) : redo rotation
+- " " (space key): erase displayed history
+- v: toggle history display mode
+- p: toggle lefty mode (change viewpoint without y rotation)
+- ?: shuffle with random 25 moves.
 
-```html
-<script  charset="utf-8" src="js/cuber.min.js"></script>
-<link rel="stylesheet" type="text/css" href="styles/cube.css">
-```
+table of `input -> standard notation`
 
-Create a new Cube, attach it to your DOM and you're good to go.
-
-```javascript
-var cube = new ERNO.Cube();
-document.body.appendChild( cube.domElement );
-```
-
-
-### Commands
-
-Cuber is interactive, but you can also twist slices programmatically. We use a variation of the [Singmaster notation](http://en.wikipedia.org/wiki/Rubik's_Cube#Move_notation) which uses a single character and it's case to denote a move. For example `cube.twist( 'U' )` rotates the Upper face clockwise. You can also chain multiple moves into a sequence such as `cube.twist( 'UDLF' )`.
-
-You can also use `cube.undo()` and `cube.redo()` to step through the move history. `cube.shuffle( 5 )` shuffles the cube 5 times. 
-
-
-
-Examples
-------------------------------------------------------------------------------
-
-__From the desktop__  
-Take a look at the [basic example](/index.html). This demonstrates many of the api settings.
+        l -> L
+        r -> R
+        u -> U
+        d -> D
+        f -> F
+        b -> B
+        L -> L'
+        R -> R'
+        U -> U'
+        D -> D'
+        F -> F'
+        B -> B'
+        a -> l
+        c -> r
+        g -> u
+        h -> d
+        i -> f
+        j -> b
+        A -> l'
+        C -> r'
+        G -> u'
+        H -> d'
+        I -> f'
+        J -> b'
+        M -> M'
+        S -> S'
+        E -> E'
+        m -> M
+        s -> S
+        e -> E
+        x -> x
+        y -> y
+        z -> z
+        X -> x'
+        Y -> y'
+        Z -> z'
