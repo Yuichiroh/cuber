@@ -911,7 +911,8 @@ ERNO.extend(ERNO.Cube.prototype, {
             this.historyQueue.empty();
             const move = this.twistQueue.future.first()
             if (move.degrees === undefined) {
-                this.addHistoryString(this.command2vis[move.command])
+                let command = (typeof move === "string") ? move : move.command
+                this.addHistoryString(this.command2vis[command])
                 this.historyQueue.add(this.twistQueue.redo());
             } else {
                 console.log("redo, obj", move)
@@ -927,22 +928,23 @@ ERNO.extend(ERNO.Cube.prototype, {
     },
 
 
-    twist: function (command) {
+    twist: function (move) {
 
         if (this.undoing) this.twistQueue.empty();
         this.historyQueue.empty();
         this.undoing = false;
-        this.twistQueue.add(command);
+        this.twistQueue.add(move);
 
-        if (command.degrees === undefined)
-            this.addHistoryString(this.command2vis[command.command])
-        else {
-            console.log("command", command)
-            if (command.degrees.absolute() >= 90) {
-                var times = command.degrees.absolute() / 90
+        if (move.degrees === undefined) {
+            let command = (typeof move === "string") ? move : move.command
+            this.addHistoryString(this.command2vis[command])
+        } else {
+            console.log("command", move)
+            if (move.degrees.absolute() >= 90) {
+                var times = move.degrees.absolute() / 90
                 console.log(times)
                 for (let i = 0; i < times; i++) {
-                    this.addHistoryString(this.command2vis[command.command])
+                    this.addHistoryString(this.command2vis[move.command])
                 }
             }
         }
