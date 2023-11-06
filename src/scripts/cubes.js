@@ -911,7 +911,12 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.historyQueue.empty();
         this.undoing = false;
         this.twistQueue.add(command);
-        this.addHistoryString(this.command2vis[command])
+        console.log("twist", typeof(command))
+        if (typeof(command) === 'string')
+            this.addHistoryString(this.command2vis[command])
+        else
+            this.addHistoryString(this.command2vis[command.command])
+
     },
 
 
