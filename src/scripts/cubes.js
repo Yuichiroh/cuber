@@ -888,10 +888,11 @@ ERNO.extend(ERNO.Cube.prototype, {
 
             this.historyQueue.add(move);
             this.undoing = true;
-            if (typeof (move) === 'string')
+            if (move.degrees === undefined)
                 this.popHistoryString()
             else {
                 console.log("undo, obj", move)
+
                 var times = move.degrees.absolute() / 90
                 console.log(times)
                 for (let i = 0; i < times; i++) {
@@ -909,7 +910,7 @@ ERNO.extend(ERNO.Cube.prototype, {
             this.undoing = true;
             this.historyQueue.empty();
             const move = this.twistQueue.future.first()
-            if (typeof (move) === 'string') {
+            if (move.degrees === undefined) {
                 this.addHistoryString(this.command2vis[move.command])
                 this.historyQueue.add(this.twistQueue.redo());
             } else {
