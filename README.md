@@ -9,7 +9,7 @@ Cuber+ implements some useful functions for instructing the CFOP method to learn
 
 ## Getting started
 
-Cloning the project and then open [./examples/basic/simple.html](./examples/basic/simple.html) file.
+Cloning the project and then open [./examples/basic/simple.html](https://yuichiroh.github.io/cuber/examples/basic/simple.html) file.
 
 ## How to use
 
