@@ -33,9 +33,6 @@ You can change a display mode for each CFOP step by pressing [0-9] keys.
 NOTION: For ease of input on a keyboard, the notation typically used in algorithms has been altered. 
 However, the moving history displayed in the monitor is presented with a standard notation.
 
-
-Note that uppercases and lowercases is altered to simplify the keyboard input. 
-
 - u, d, r, l, f, b: rotate clockwise a specified face.
 - U, D, R, L, F, B: rotate counter-clockwise a specified face.
 - g, h, c, a, i, j: rotate clockwise specified two faces (each corresponds to u, d, r, l, f, b, respectively).
