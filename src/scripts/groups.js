@@ -30,14 +30,14 @@ ERNO.Group = function(){
 }
 
 
-ERNO.extend( ERNO.Group.prototype, THREE.EventDispatcher.prototype );	
+ERNO.extend( ERNO.Group.prototype, THREE.EventDispatcher.prototype );
 
 ERNO.extend( ERNO.Group.prototype, {
 
 
 	add: function(){
 
-		var 
+		var
 		cubeletsToAdd = Array.prototype.slice.call( arguments ),
 		that = this;
 
@@ -179,7 +179,7 @@ ERNO.extend( ERNO.Group.prototype, {
 
 				var color = cubelet[ face ].color.name;
 				if( faceColors[ color ] === undefined ){
-					
+
 					faceColors[ color ] = 1;
 					numberOfColors ++;
 				}
@@ -188,7 +188,7 @@ ERNO.extend( ERNO.Group.prototype, {
 			return numberOfColors === 1 ? true : false;
 		}
 		else {
-		
+
 			console.warn( 'A face [String or ERNO.Controls] argument must be specified when using ERNO.Group.isSolved().' )
 			return false
 		}
@@ -240,7 +240,7 @@ ERNO.extend( ERNO.Group.prototype, {
 
 		this.cubelets.forEach( function( cubelet ){ cubelet.hideIntroverts( only, soft ) })
 		return this
-	},		
+	},
 	showStickers: function(){
 
 		this.cubelets.forEach( function( cubelet ){ cubelet.showStickers() })
@@ -289,6 +289,16 @@ ERNO.extend( ERNO.Group.prototype, {
 	hideTexts: function(){
 
 		this.cubelets.forEach( function( cubelet ){ cubelet.hideTexts() })
+		return this
+	},
+	highlight: function(){
+
+		this.cubelets.forEach( function( cubelet ){ cubelet.highlight() })
+		return this
+	},
+	unhighlight: function(){
+
+		this.cubelets.forEach( function( cubelet ){ cubelet.unhighlight() })
 		return this
 	},
 

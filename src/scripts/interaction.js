@@ -390,7 +390,10 @@ ERNO.Interaction = (function(){
 					face: intersection.face
 				});
 				console.log(cubelet)
-				cubelet.showIntroverts()
+				if (cubelet.highlighting)
+					cubelet.unhighlight()
+				else
+					cubelet.highlight()
 				return true;
 			}
 			return false;
