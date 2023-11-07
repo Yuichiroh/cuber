@@ -26,7 +26,18 @@ You can change the display mode for each CFOP step by pressing [0-9] keys.
 - 6: Edge PLL mode
 - 7: PLL mode (same as standard mode)
 - 8: Yellow Cross mode (Edge OLL mode with side stickers)
-- 9: Last Layer mode (only show top layer cubelets and center cubelets) 
+- 9: Last Layer mode (only show top layer cubelets and center cubelets)
+
+You can also highlight cubelets by clicking them. 
+
+### Functional keys
+- "-" (minus key) or "," (comma key): undo rotation
+- "=" (equal key) or "." (period key): redo rotation
+- " " (space key): erase displayed history
+- v: toggle history display mode
+- p: toggle lefty mode (change viewpoint without y rotation)
+- "/" (slash key): turn off all highlighting of the cubelets
+- ?: shuffle with random 25 moves
 
 ### Rotation shortcuts
 
@@ -39,12 +50,6 @@ However, the moving history displayed on the monitor is presented with a standar
 - G, H, C, A, I, J: rotate counter-clockwise specified two faces (each corresponds to u', d', r', l', f', b', respectively).
 - m, s, e: slice middle layer clockwise
 - M, S, E:  slice middle layer counter-clockwise
-- \- (minus key): undo rotation
-- = (equal key): redo rotation
-- " " (space key): erase displayed history
-- v: toggle history display mode
-- p: toggle lefty mode (change viewpoint without y rotation)
-- ?: shuffle with random 25 moves.
 
 table of `input -> standard notation`
 
