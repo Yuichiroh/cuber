@@ -99,7 +99,7 @@
 }
 
 	.cube /*.cubelet >*/ .face.highlight{
-		background-color: #222;
+		background-color: #333;
 		/*box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;*/
 		/*box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;*/
 		/*box-shadow: rgba(255, 255, 255, 0.3) 0px 30px 60px -12px inset, rgba(255, 255, 200, 0.5) 0px 18px 36px -18px inset;*/
@@ -218,21 +218,21 @@
 .cube .sticker.white 	{ background: #EEEEEE;	}
 .cube .sticker.blue 	{ background: #3D81F6; 	}
 /*.cube .sticker.green 	{ background: #009D54;	}  */
-.cube .sticker.green 	{ background: #20DD54;	}
-.cube .sticker.orange 	{ background: #FF9A20; 	}
+.cube .sticker.green 	{ background: #20DC54;	}
+.cube .sticker.orange 	{ background: #FFAA20; 	}
 /*.cube .sticker.yellow 	{ background: #F5B400; 	}*/
-.cube .sticker.yellow 	{ background: #FFFF00; 	}
+.cube .sticker.yellow 	{ background: #FAFA00; 	}
 .cube .sticker.gray 	{ background: #888888; 	}
 .cube .sticker.black 	{ background: #444444; 	}
 
-.cube .sticker.highlight.red 	{ background: #FF623F;	}
+.cube .sticker.highlight.red 	{ background: #FF7A6F;	}
 .cube .sticker.highlight.white 	{ background: #FFFFFF;	}
-.cube .sticker.highlight.blue 	{ background: #5DA1F6; 	}
+.cube .sticker.highlight.blue 	{ background: #6DB1F6; 	}
 /*.cube .sticker.highlight.green 	{ background: #009D54;	}  */
-.cube .sticker.highlight.green 	{ background: #40FD74;	}
-.cube .sticker.highlight.orange { background: #FFBA40; 	}
+.cube .sticker.highlight.green 	{ background: #70FF84;	}
+.cube .sticker.highlight.orange { background: #FFDD50; 	}
 /*.cube .sticker.highlight.yellow 	{ background: #F5B400; 	}*/
-.cube .sticker.highlight.yellow { background: #FFFFA0; 	}
+.cube .sticker.highlight.yellow { background: #FAFFA0; 	}
 .cube .sticker.highlight.gray 	{ background: #888888; 	}
 .cube .sticker.highlight.black 	{ background: #444444; 	}
 
