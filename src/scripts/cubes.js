@@ -172,7 +172,7 @@ ERNO.Cube = function (parameters) {
     this.solutionStep = document.getElementById('type');
 
     this.algDisplay = document.getElementById('alg');
-    this.algMax = 40
+    this.algMax = 50
     this.showAlg = parameters.alg
     this.algHistory = []
     this.algFullHistory = []
