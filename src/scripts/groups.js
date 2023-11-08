@@ -297,7 +297,6 @@ ERNO.extend( ERNO.Group.prototype, {
 		return this
 	},
 	unhighlight: function(){
-
 		this.cubelets.forEach( function( cubelet ){ cubelet.unhighlight() })
 		return this
 	},

@@ -431,6 +431,12 @@ ERNO.renderers.CSS3DCubelet.methods = (function () {
       this.getFaceElements(' .sticker').forEach(hideItem);
       this.showingStickers = false;
     },
+    toggleStickers: function () {
+      if (this.showingStickers)
+        this.hideStickers()
+      else
+        this.showStickers()
+    },
     hideSticker: function (color) {
 
       this.getFaceElements(' .sticker.' + color).forEach(hideItem);
@@ -441,6 +447,23 @@ ERNO.renderers.CSS3DCubelet.methods = (function () {
       this.getFaceElements(' .sticker').forEach(showItem);
       this.showingStickers = true;
     },
+    toggleFaceSticker: function (face) {
+      if (this.showingFaceSticker[face])
+        this.hideFaceSticker(face)
+      else
+        this.showFaceSticker(face)
+      console.log(this.showingStickers)
+    },
+    showFaceSticker: function (face) {
+      this.getFaceElements(face + ' .sticker').forEach(showItem);
+      this.showingFaceSticker[face] = true;
+    },
+
+    hideFaceSticker: function (face) {
+      this.getFaceElements(face + ' .sticker').forEach(hideItem);
+      this.showingFaceSticker[face] = false;
+    },
+
     showSticker: function (color) {
 
       this.getFaceElements(' .sticker.' + color).forEach(showItem);
@@ -493,6 +516,12 @@ ERNO.renderers.CSS3DCubelet.methods = (function () {
         item.classList.remove('highlight');
       });
       this.highlighting = false;
+    },
+    toggleHighlight: function () {
+      if(this.highlighting)
+        this.highlight()
+      else
+        this.unhighlight()
     },
     getOpacity: function () {
 

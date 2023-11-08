@@ -329,6 +329,8 @@ ERNO.Cubelet = function( cube, cubeletId, colors ){
 	// this.hideIds();
 	// this.hideTexts();
 	// this.hideWireframes();
+	this.showingFaceSticker = {}
+
 
 
 	//  During a rotation animation this Cubelet marks itself as 
