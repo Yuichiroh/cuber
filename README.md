@@ -95,3 +95,12 @@ table of `input -> standard notation`
         X -> x'
         Y -> y'
         Z -> z'
+
+### URL Parameters
+
+You can specify setup moves and display mode in advance via URL GET parameters as an example like [this](https://yuichiroh.github.io/cuber/examples/basic/simple.html?alg=(R%20U%20R%27%20U)%20(R%20U2%20R%27)&mode=Last%20Layer).
+
+| Key  | Value example        |
+|------|----------------------|
+| alg  | (R U R' U) (R U2 R') |
+| mode | Last Layer           |

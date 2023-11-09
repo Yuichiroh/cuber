@@ -93,6 +93,13 @@ ERNO.Cube = function (parameters) {
     this.autoRotate = parameters.autoRotate === undefined ? false : parameters.autoRotate;
     this.keyboardControlsEnabled = parameters.keyboardControlsEnabled === undefined ? true : parameters.keyboardControlsEnabled;
     this.mouseControlsEnabled = parameters.mouseControlsEnabled === undefined ? true : parameters.mouseControlsEnabled;
+    this.initAlg = parameters.initAlg;
+    this.solutionStep = document.getElementById('type');
+    this.algDisplay = document.getElementById('alg');
+    this.solutionStep.textContent = parameters.mode
+    this.showAlg = parameters.alg
+
+    console.log(this.initAlg)
 
     var renderFactory = parameters.renderer || ERNO.renderers.CSS3D;
 
@@ -172,11 +179,7 @@ ERNO.Cube = function (parameters) {
     this.camera = new THREE.PerspectiveCamera(FIELD_OF_VIEW, ASPECT_RATIO, NEAR, FAR);
     this.camera.position.z = this.size * 4;
 
-    this.solutionStep = document.getElementById('type');
-
-    this.algDisplay = document.getElementById('alg');
     this.algMax = 50
-    this.showAlg = parameters.alg
     this.algHistory = []
     this.algFullHistory = []
 
@@ -585,8 +588,8 @@ ERNO.Cube = function (parameters) {
                     0: "All",
                     "`": "Blank",
                 }
-                this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key]);
                 this.solutionStep.textContent = key2solutionStep[key];
+                this.changeCubeletsVisibility();
             } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
                 this.twist(new ERNO.Twist(command));
             } else if (key === '-' || key === ',') {
@@ -684,6 +687,12 @@ ERNO.Cube = function (parameters) {
         Z: "z",
     };
 
+    // this.setProblem(function () {
+    //     $(this.domElement).show()
+    // })
+    this.setup()
+    this.changeCubeletsVisibility();
+
 }
 
 
@@ -735,11 +744,11 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.reconstructHistoryString()
     },
 
-    changeCubeletsVisibility: function (cubelets, solutionStep) {
+    changeCubeletsVisibility: function () {
         this.algDisplay.textContent = ""
-        for (var cubelet of cubelets) {
+        for (var cubelet of this.cubelets) {
             cubelet.showStickers()
-            switch (solutionStep) {
+            switch (this.solutionStep.textContent) {
                 case 'Cross':
                 case 'White Cross':
                     if (cubelet.hasColor(ERNO.YELLOW) && cubelet.type !== 'center') {
@@ -929,7 +938,42 @@ ERNO.extend(ERNO.Cube.prototype, {
         }
     },
 
+    setProblem: function (callback, options) {
+        var settings = $.extend({
+            step: undefined
+        }, options);
 
+        var solution = this.translateSolution(this.initAlg);
+        console.log(solution)
+
+        var twistDuration = this.twistDuration;
+        this.twistDuration = this.resettingTwistDuration;
+        // this.resume();
+
+        // $(this.domElement).hide()
+        solution.forEach(function (move) {
+            this.taskQueue.add(move);
+        }.bind(this));
+
+        var moves = this.taskQueue.future.length;
+        var completed = 0;
+
+        this.addEventListener('onTwistComplete', function count() {
+            ++completed;
+            console.log(completed, moves)
+            if (completed >= moves) {
+                // this.pause();
+                this.twistDuration = twistDuration;
+                if (callback) callback();
+                this.removeEventListener('onTwistComplete', count)
+            }
+        });
+
+        // while (this.twistQueue.future.length) this.twistQueue.do();
+        // while (this.twistQueue.history.length) {
+        //     this.immediateTwist(this.twistQueue.undo().getInverse());
+        // }
+    },
     redo: function () {
 
         if (this.twistQueue.future.length > 0) {
@@ -953,12 +997,26 @@ ERNO.extend(ERNO.Cube.prototype, {
 
     },
     reset: function () {
-        if(this.twistQueue.history.length > 0) {
+        if (this.twistQueue.history.length > 0) {
             this.resetting = true
-            this.cubelets.forEach(function (c) {
-                c.hide()
-            })
+            $(this.domElement).hide()
             this.undoAll()
+        }
+    },
+    setup: function () {
+        if (this.initAlg) {
+            $(this.domElement).hide()
+            this.resetting = true
+            var solution = this.translateSolution(this.initAlg);
+
+            solution.forEach(function (moves) {
+                this.twistQueue.add(moves)
+            }.bind(this));
+            while (this.twistQueue.future.length) this.twistQueue.do();
+            // while (this.twistQueue.history.length) {
+            //     this.immediateTwist(this.twistQueue.undo().getInverse());
+            // }
+            this.reset();
         }
     },
     undoAll: function () {
@@ -977,6 +1035,7 @@ ERNO.extend(ERNO.Cube.prototype, {
         this.undoing = false;
         this.resetting = false;
         this.twistQueue.add(move);
+        console.log("moves", move)
 
         if (move.degrees === undefined) {
             let command = (typeof move === "string") ? move : move.command
@@ -991,10 +1050,10 @@ ERNO.extend(ERNO.Cube.prototype, {
                 }
             }
         }
+        console.log(this.algHistory)
+        console.log(this.algFullHistory)
 
     },
-
-
     immediateTwist: function (twist) {
 
 
@@ -1012,7 +1071,8 @@ ERNO.extend(ERNO.Cube.prototype, {
         var slice = this.slicesDictionary[twist.command.toLowerCase()],
             rotation = (twist.degrees === undefined ? 90 : twist.degrees) * twist.vector,
             radians = rotation.degreesToRadians(),
-            duration = Math.abs(radians - slice.rotation) / (Math.PI * 0.5) * (this.resetting ? this.resettingTwistDuration : this.twistDuration);
+            duration = Math.abs(radians - slice.rotation) / (Math.PI * 0.5) *
+                (this.resetting ? this.resettingTwistDuration : this.twistDuration);
 
 
         var l = slice.indices.length,
@@ -1085,6 +1145,77 @@ ERNO.extend(ERNO.Cube.prototype, {
             }.bind(this))
             .start(this.time);
 
+    },
+    translateSolution: function (solution, depth) {
+        if (depth === undefined) depth = 0;
+        console.log(solution, depth)
+        var elements = solution.slice(0);
+        var i, j, element, cw, degrees, lookAhead, twists;
+        var map = {
+            l: 'A',
+            r: 'C',
+            u: 'G',
+            d: 'H',
+            f: 'I',
+            b: 'J',
+            x: 'X',
+            y: 'Y',
+            z: 'Z'
+        };
+        if (typeof elements === 'object') {
+            for (i = 0; i < elements.length; ++i) {
+                if (typeof elements[i] === 'object') {
+                    element = elements.splice(i, 1);
+                    for (j = 0; j < element.length; ++j) {
+                        elements.splice(i, 0, element[j]);
+                    }
+                    --i;
+                    continue;
+                } else if (elements[i].match(/[()]/)) {
+                    elements[i] = elements[i].replace(/[()]/g, '');
+                }
+                elements[i] = this.translateSolution(elements[i], depth + 1);
+            }
+            return elements;
+        } else if (typeof elements === 'string') {
+            twists = [];
+            elements = elements.replace(/[^()BDEFLMRSUXYZ2'’]/gi, '');
+            if (elements.match(/\([^)]+\(/) || elements.match(/^[^(]+\)/) || elements.match(/\([^)]+$/)) {
+                elements = elements.replace(/[()]/g, '');
+            } else if (elements.match(/^\([^()]+\)$/)) {
+                elements = elements.replace(/^\(([^()]+)\)$/, '$1');
+            } else if (elements.match(/[()]/)) {
+                elements = elements.match(/\([^()]+\)|[^()]+/g);
+                return this.translateSolution(elements, depth);
+            }
+            for (i = 0; i < elements.length; ++i) {
+                element = elements[i];
+                cw = 1;
+                degrees = 90;
+                if (i + 1 < elements.length) {
+                    lookAhead = elements[i + 1];
+                    if (lookAhead.match(/[2'’]/)) {
+                        if (lookAhead == '2') {
+                            degrees = 180;
+                            elements = elements.splice(i + 1, 1);
+                            if (i + 1 < elements.length) {
+                                lookAhead = elements[i + 1];
+                            }
+                        }
+                        if (lookAhead.match(/['’]/)) {
+                            cw = 0;
+                            elements = elements.splice(i + 1, 1);
+                        }
+                    }
+                }
+                ;
+                if (element.toLowerCase() === element) {
+                    element = map[element];
+                }
+                twists.push(new ERNO.Twist(cw ? element.toUpperCase() : element.toLowerCase(), degrees));
+            }
+            return depth ? twists : [twists];
+        }
     },
 
 
@@ -1241,9 +1372,9 @@ ERNO.extend(ERNO.Cube.prototype, {
                         if (twist.degrees === 0 || twist.isShuffle) queue.purge(twist);
 
                         this.immediateTwist(twist);
-                        if(this.historyQueue.future.length <= 0){
-                            this.resetting = false
-                            this.cubelets.forEach(function (c) {c.show()})
+                        if (this.historyQueue.future.length <= 0) {
+                            this.resetting = false;
+                            $(this.domElement).show()
                         }
                     }
 
