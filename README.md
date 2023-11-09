@@ -15,7 +15,7 @@ Cloning the project and then open [./examples/basic/simple.html](https://yuichir
 
 ### Display mode
 
-You can change the display mode for each CFOP step by pressing [0-9], |, and \ keys.
+You can change the display mode for each CFOP step by pressing [0-9], and ` keys.
 
 - 0: Standard mode
 - 1: Cross mode
@@ -27,8 +27,12 @@ You can change the display mode for each CFOP step by pressing [0-9], |, and \ k
 - 7: PLL mode (same as standard mode)
 - 8: Yellow Cross mode (Edge OLL mode with side stickers)
 - 9: Last Layer mode (only show top layer cubelets and center cubelets)
-- "\\" (back slash): Blank mode (you can show/hide any cubelets by clicking them)
-- "|" (vertical bar): Blank mode (you can show/hide any cubelet stickers by clicking them)
+- "`" (back quote key): Blank mode 
+
+### Edit mode
+- "/" (slash key): toggle highlighting of the cubelets by clicking them
+- "\\" (back slash): show/hide cubelets by clicking them
+- "|" (vertical bar): show/hide cubelet stickers by clicking them
 
 You can also highlight cubelets by clicking them. 
 
@@ -38,8 +42,8 @@ You can also highlight cubelets by clicking them.
 - " " (space key): erase displayed history
 - v: toggle history display mode
 - p: toggle lefty mode (change viewpoint without y rotation)
-- "/" (slash key): turn off all highlighting of the cubelets
 - ?: shuffle with random 25 moves
+- !: reset rotations
 
 ### Rotation shortcuts
 

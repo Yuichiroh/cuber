@@ -382,13 +382,14 @@ ERNO.Interaction = (function () {
                         cubelet: intersection.cubelet,
                         face: intersection.face
                     });
-                    console.log(cubelet)
-                    console.log(intersection.face)
-                    if (cube.blankFaceMode) {
-                        cubelet.toggleFaceSticker(intersection.face.charAt(0) + intersection.face.slice(1).toLowerCase())
-                    } else if (cube.blankCubeletMode) {
+                    if (cube.clickMode === cube.TOGGLE_FACE_MODE) {
+                        console.log(intersection.face)
+                        cubelet.toggleFaceSticker(intersection.face)
+                    } else if (cube.clickMode === cube.TOGGLE_CUBULET_MODE) {
+                        console.log(cubelet)
                         cubelet.toggleStickers()
                     } else {
+                        console.log(cubelet)
                         cubelet.toggleHighlight()
                     }
                     return true;

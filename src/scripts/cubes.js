@@ -109,6 +109,7 @@ ERNO.Cube = function (parameters) {
     this.isReady = true;
     this.isSolving = false;
     this.undoing = false;
+    this.resetting = false;
     this.render = true;
     this.finalShuffle = null;
     this.hideInvisibleFaces = parameters.hideInvisibleFaces === undefined ? false : parameters.hideInvisibleFaces;
@@ -143,7 +144,9 @@ ERNO.Cube = function (parameters) {
 
     //  How long should a Cube.twist() take?
 
-    this.twistDuration = parameters.twistDuration !== undefined ? parameters.twistDuration : 250;
+    this.defaultTwistDuration = 250
+    this.resettingTwistDuration = 0
+    this.twistDuration = parameters.twistDuration !== undefined ? parameters.twistDuration : this.defaultTwistDuration;
 
 
     //  If we shuffle, how shall we do it?
@@ -177,9 +180,12 @@ ERNO.Cube = function (parameters) {
     this.algHistory = []
     this.algFullHistory = []
 
-    this.blankCubuletMode = false
-    this.blankFaceMode = false
-    this.lefty = false
+    this.HIGHLIGHTING_MODE = "highlighting"
+    this.TOGGLE_FACE_MODE = "toggle-face"
+    this.TOGGLE_CUBULET_MODE = "toggle-cubulet"
+
+    this.clickMode = this.HIGHLIGHTING
+
 
     //	To do all the things normaly associated with a 3D object
     //	we'll need to borrow a few properties from Three.js.
@@ -565,7 +571,7 @@ ERNO.Cube = function (parameters) {
                 this.algDisplay.textContent = "";
                 this.algHistory = [];
                 this.algFullHistory = [];
-            } else if ('1234567890|\\'.indexOf(key) >= 0) {
+            } else if ('1234567890`'.indexOf(key) >= 0) {
                 key2solutionStep = {
                     1: "Cross",
                     2: "F2L",
@@ -577,21 +583,25 @@ ERNO.Cube = function (parameters) {
                     8: "Yellow Cross",
                     9: "Last Layer",
                     0: "All",
-                    '\\': "Blank",
-                    '|': "Blank"
+                    "`": "Blank",
                 }
                 this.changeCubeletsVisibility(this.cubelets, key2solutionStep[key]);
                 this.solutionStep.textContent = key2solutionStep[key];
-                this.blankCubeletMode = key === '\\';
-                this.blankFaceMode = key === '|';
             } else if ('XxRrMmLlYyUuEeDdZzFfSsBbAaCcGgHhIiJj'.indexOf(command) >= 0) {
                 this.twist(new ERNO.Twist(command));
             } else if (key === '-' || key === ',') {
                 this.undo();
             } else if (key === '=' || key === '.') {
                 this.redo();
+            } else if (key === '!') {
+                this.reset();
             } else if (key === '/') {
                 this.removeAllHighlights();
+                this.clickMode = this.HIGHLIGHTING_MODE
+            } else if (key === '|') {
+                this.clickMode = this.TOGGLE_FACE_MODE
+            } else if (key === '\\') {
+                this.clickMode = this.TOGGLE_CUBULET_MODE
             } else if (key === 'v') {
                 this.showAlg = !this.showAlg
                 if (this.algDisplay.style.display === "none")
@@ -942,13 +952,30 @@ ERNO.extend(ERNO.Cube.prototype, {
         }
 
     },
-
-
+    reset: function () {
+        if(this.twistQueue.history.length > 0) {
+            this.resetting = true
+            this.cubelets.forEach(function (c) {
+                c.hide()
+            })
+            this.undoAll()
+        }
+    },
+    undoAll: function () {
+        console.log(this.twistQueue.history.length)
+        const len = this.twistQueue.history.length
+        for (i = 0; i < len; i++) {
+            this.undo()
+            console.log(i)
+        }
+        console.log(this.twistQueue.history)
+    },
     twist: function (move) {
 
-        if (this.undoing) this.twistQueue.empty();
+        if (this.undoing || this.resetting) this.twistQueue.empty();
         this.historyQueue.empty();
         this.undoing = false;
+        this.resetting = false;
         this.twistQueue.add(move);
 
         if (move.degrees === undefined) {
@@ -985,7 +1012,7 @@ ERNO.extend(ERNO.Cube.prototype, {
         var slice = this.slicesDictionary[twist.command.toLowerCase()],
             rotation = (twist.degrees === undefined ? 90 : twist.degrees) * twist.vector,
             radians = rotation.degreesToRadians(),
-            duration = Math.abs(radians - slice.rotation) / (Math.PI * 0.5) * this.twistDuration;
+            duration = Math.abs(radians - slice.rotation) / (Math.PI * 0.5) * (this.resetting ? this.resettingTwistDuration : this.twistDuration);
 
 
         var l = slice.indices.length,
@@ -1213,10 +1240,11 @@ ERNO.extend(ERNO.Cube.prototype, {
                         //  then we don't need to remember it.
                         if (twist.degrees === 0 || twist.isShuffle) queue.purge(twist);
 
-
                         this.immediateTwist(twist);
-
-
+                        if(this.historyQueue.future.length <= 0){
+                            this.resetting = false
+                            this.cubelets.forEach(function (c) {c.show()})
+                        }
                     }
 
                     // }
