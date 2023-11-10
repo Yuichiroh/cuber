@@ -95,7 +95,7 @@ $(document).ready(function () {
         renderer: isIe ? ERNO.renderers.IeCSS3D : null,
         // cubeletColorMap: generateCubeletColorMap(document.getElementById( 'type' ).textContent),
         initAlg: params.get('alg'),
-        mode: params.get('mode'),
+        mode: params.get('mode') ? params.get('mode') : "All",
         alg: true
     });
 
